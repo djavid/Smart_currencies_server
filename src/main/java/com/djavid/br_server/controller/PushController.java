@@ -74,22 +74,6 @@ public class PushController {
         return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
     }
 
-    @Scheduled(fixedDelay = 5000)
-    public void send() throws JSONException {
-
-        RegistrationToken token = registrationTokenRepository.findOne(1L);
-
-        try {
-            CompletableFuture<String> pushNotification = androidPushNotificationsService
-                    .send(token.token, "Изменение цены Bitcoin", new Date().toString());
-            CompletableFuture.allOf(pushNotification).join();
-            String firebaseResponse = pushNotification.get();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public TokenRegistrationResponse registerToken(@RequestParam("token") String device_id) {
 
