@@ -1,6 +1,7 @@
 package com.djavid.br_server.tasks;
 
 import com.djavid.br_server.model.entity.RegistrationToken;
+import com.djavid.br_server.model.entity.cryptonator.CoinMarketCapTicker;
 import com.djavid.br_server.model.entity.cryptonator.CryptonatorTicker;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.push.AndroidPushNotificationsService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -20,7 +22,8 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class ScheduledTasks {
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
-    private final static String CRYPTONATOR_URL = "https://api.cryptonator.com/api/full";
+    private final static String CRYPTONATOR_URL = "https://api.cryptonator.com/api/full/";
+    private final static String COINMARKETCAP_URL = "https://api.coinmarketcap.com/v1/ticker/?convert=";
 
     private static String[] crypto_coins = {"BTC", "BCH", "LTC", "ETH", "NVC", "NMC", "PPC", "DOGE"};
     private static String[] country_coins = {"USD", "EUR", "CAD", "CNY", "JPY", "PLN", "GBP", "RUB", "UAH"};
@@ -60,10 +63,21 @@ public class ScheduledTasks {
 
     @Scheduled(fixedDelay = 30000)
     public void getCurrentRate() {
+        List<CoinMarketCapTicker> tickers = new ArrayList<>();
 
-        CryptonatorTicker ticker = restTemplate
-                .getForObject(CRYPTONATOR_URL + "/" + crypto_coins[0] + "-" + country_coins[0], CryptonatorTicker.class);
-        log.info(String.valueOf(ticker.getTicker().getPrice()));
+        for (String country : country_coins) {
+            CoinMarketCapTicker ticker = restTemplate
+                    .getForObject(COINMARKETCAP_URL + country, CoinMarketCapTicker.class);
+            ticker.country_symbol = country;
+            tickers.add(ticker);
+        }
+
+        StringBuilder summary = new StringBuilder();
+        for (CoinMarketCapTicker ticker : tickers) {
+            summary.append("{" + ticker.country_symbol + "; " + ticker.getPrice() + "} ");
+        }
+
+        log.info(String.valueOf(summary.toString()));
     }
 
 }
