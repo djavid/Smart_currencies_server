@@ -7,5 +7,6 @@ import java.util.List;
 
 
 public interface SubscribeRepository extends CrudRepository<Subscribe, Long> {
-    List<Subscribe> findSubscribeByCountryIdAndCurrId(String country_id, String curr_id);
+    List<Subscribe> findSubscribesByCountryIdAndCurrId(String country_id, String curr_id);
+    List<Subscribe> findSubscribesByTokenId(long token_id);
 }
