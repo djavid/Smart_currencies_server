@@ -85,7 +85,7 @@ public class ScheduledTasks {
 
         String summary = "";
         for (CoinMarketCapTicker ticker : pairs) {
-            summary += "{" + ticker.getSymbol() + "-" + ticker.getCountry_symbol() + " = " + ticker.getPrice() + "} ";
+            summary += "{" + ticker.getCountry_symbol() + "-" + ticker.getSymbol() + " = " + ticker.getPrice() + "} ";
         }
         log.info(summary);
 
