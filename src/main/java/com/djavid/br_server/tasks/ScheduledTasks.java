@@ -2,6 +2,7 @@ package com.djavid.br_server.tasks;
 
 import com.djavid.br_server.model.entity.RegistrationToken;
 import com.djavid.br_server.model.entity.cryptonator.CoinMarketCapTicker;
+import com.djavid.br_server.model.entity.cryptonator.CoinMarketList;
 import com.djavid.br_server.model.entity.cryptonator.CryptonatorTicker;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.push.AndroidPushNotificationsService;
@@ -16,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -63,21 +65,34 @@ public class ScheduledTasks {
 
     @Scheduled(fixedDelay = 30000)
     public void getCurrentRate() {
-        List<CoinMarketCapTicker> tickers = new ArrayList<>();
+        List<CoinMarketList> arrayList = new ArrayList<>();
+        List<CoinMarketCapTicker> pairs = new ArrayList<>();
 
         for (String country : country_coins) {
-            CoinMarketCapTicker ticker = restTemplate
-                    .getForObject(COINMARKETCAP_URL + country, CoinMarketCapTicker.class);
-            ticker.country_symbol = country;
-            tickers.add(ticker);
+            CoinMarketList coinMarketList = restTemplate
+                    .getForObject(COINMARKETCAP_URL + country, CoinMarketList.class);
+
+            for (int i = 0; i < 4; i++) {
+                String coin_symbol = crypto_coins[i];
+                coinMarketList.getTickers()
+                        .stream()
+                        .filter(ticker -> ticker.getSymbol().equals(coin_symbol))
+                        .findFirst()
+                        .ifPresent(ticker -> {
+                            ticker.setCountry_symbol(country);
+                            pairs.add(ticker);
+                        });
+            }
+
+            arrayList.add(coinMarketList);
         }
 
-        StringBuilder summary = new StringBuilder();
-        for (CoinMarketCapTicker ticker : tickers) {
-            summary.append("{" + ticker.country_symbol + "; " + ticker.getPrice() + "} ");
+        String summary = "";
+        for (CoinMarketCapTicker ticker : pairs) {
+            summary += "{" + ticker.getSymbol() + "-" + ticker.getCountry_symbol() + " = " + ticker.getPrice() + "} ";
         }
+        log.info(summary);
 
-        log.info(String.valueOf(summary.toString()));
     }
 
 }

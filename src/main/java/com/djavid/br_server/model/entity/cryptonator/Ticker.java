@@ -1,6 +1,5 @@
 package com.djavid.br_server.model.entity.cryptonator;
 
-import com.djavid.br_server.model.entity.cryptonator.Market;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;

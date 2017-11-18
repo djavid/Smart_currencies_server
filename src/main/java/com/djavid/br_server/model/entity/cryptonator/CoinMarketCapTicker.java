@@ -1,6 +1,9 @@
 package com.djavid.br_server.model.entity.cryptonator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CoinMarketCapTicker {
 
     private String id;
@@ -26,7 +29,7 @@ public class CoinMarketCapTicker {
     private double price_rub;
     private double price_uah;
 
-    public String country_symbol;
+    private String country_symbol;
 
 
     public Double getPrice(String id) {
@@ -205,5 +208,13 @@ public class CoinMarketCapTicker {
     }
     public void setPrice_uah(double price_uah) {
         this.price_uah = price_uah;
+    }
+
+
+    public String getCountry_symbol() {
+        return country_symbol;
+    }
+    public void setCountry_symbol(String country_symbol) {
+        this.country_symbol = country_symbol;
     }
 }
