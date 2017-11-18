@@ -51,7 +51,7 @@ public class Subscribe {
         this.countryId = countryId;
     }
 
-    @JsonProperty(value="isSuccess")
+    @JsonProperty(value="isTrendingUp")
     public boolean isTrendingUp() {
         return isTrendingUp;
     }
