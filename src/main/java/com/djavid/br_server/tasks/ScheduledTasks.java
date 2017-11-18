@@ -22,8 +22,8 @@ public class ScheduledTasks {
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private final static String CRYPTONATOR_URL = "https://api.cryptonator.com/api/full";
 
-    public static String[] crypto_coins = {"BTC", "BCH", "LTC", "ETH", "NVC", "NMC", "PPC", "DOGE"};
-    public static String[] country_coins = {"USD", "EUR", "CAD", "CNY", "JPY", "PLN", "GBP", "RUB", "UAH"};
+    private static String[] crypto_coins = {"BTC", "BCH", "LTC", "ETH", "NVC", "NMC", "PPC", "DOGE"};
+    private static String[] country_coins = {"USD", "EUR", "CAD", "CNY", "JPY", "PLN", "GBP", "RUB", "UAH"};
 
     private RegistrationTokenRepository registrationTokenRepository;
     private AndroidPushNotificationsService androidPushNotificationsService;
@@ -62,7 +62,7 @@ public class ScheduledTasks {
     public void getCurrentRate() {
 
         CryptonatorTicker ticker = restTemplate
-                .getForObject(CRYPTONATOR_URL + crypto_coins[0] + country_coins[0], CryptonatorTicker.class);
+                .getForObject(CRYPTONATOR_URL + crypto_coins[0] + "-" + country_coins[0], CryptonatorTicker.class);
         log.info(ticker.toString());
     }
 
