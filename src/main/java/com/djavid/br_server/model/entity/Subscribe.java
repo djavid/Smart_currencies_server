@@ -1,5 +1,7 @@
 package com.djavid.br_server.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -49,6 +51,7 @@ public class Subscribe {
         this.countryId = countryId;
     }
 
+    @JsonProperty(value="isSuccess")
     public boolean isTrendingUp() {
         return isTrendingUp;
     }
