@@ -30,7 +30,7 @@ public class ScheduledTasks {
         this.androidPushNotificationsService = androidPushNotificationsService;
     }
 
-    @Scheduled(fixedRate = 5000)
+    //@Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
         log.info("Sending push notification...");
 
