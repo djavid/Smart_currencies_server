@@ -63,7 +63,7 @@ public class ScheduledTasks {
 
         CryptonatorTicker ticker = restTemplate
                 .getForObject(CRYPTONATOR_URL + "/" + crypto_coins[0] + "-" + country_coins[0], CryptonatorTicker.class);
-        log.info(ticker.toString());
+        log.info(String.valueOf(ticker.getTicker().getPrice()));
     }
 
 }
