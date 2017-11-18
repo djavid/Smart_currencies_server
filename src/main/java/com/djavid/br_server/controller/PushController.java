@@ -1,5 +1,6 @@
 package com.djavid.br_server.controller;
 
+import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
@@ -55,7 +56,6 @@ public class PushController {
         return registrationTokenRepository.findOne(id);
     }
 
-    @Scheduled(fixedDelay = 5000)
     @RequestMapping(value = "/send", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> send(@RequestParam("title") String title, @RequestParam("body") String desc) throws JSONException {
 
@@ -72,6 +72,22 @@ public class PushController {
         }
 
         return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
+    }
+
+    @Scheduled(fixedDelay = 5000)
+    public void send() throws JSONException {
+
+        RegistrationToken token = registrationTokenRepository.findOne(1L);
+
+        try {
+            CompletableFuture<String> pushNotification = androidPushNotificationsService
+                    .send(token.token, "Изменение цены Bitcoin", new Date().toString());
+            CompletableFuture.allOf(pushNotification).join();
+            String firebaseResponse = pushNotification.get();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
