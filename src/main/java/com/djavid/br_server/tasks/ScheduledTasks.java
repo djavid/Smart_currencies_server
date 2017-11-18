@@ -58,7 +58,7 @@ public class ScheduledTasks {
     }
 
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 30000)
     public void getCurrentRate() {
 
         CryptonatorTicker ticker = restTemplate
