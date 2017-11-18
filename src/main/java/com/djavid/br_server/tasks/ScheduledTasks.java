@@ -14,10 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -65,17 +62,16 @@ public class ScheduledTasks {
 
     @Scheduled(fixedDelay = 30000)
     public void getCurrentRate() {
-        List<CoinMarketList> arrayList = new ArrayList<>();
+        //List<CoinMarketList> arrayList = new ArrayList<>();
         List<CoinMarketCapTicker> pairs = new ArrayList<>();
 
         for (String country : country_coins) {
-            CoinMarketList coinMarketList = restTemplate
-                    .getForObject(COINMARKETCAP_URL + country, CoinMarketList.class);
+            CoinMarketCapTicker[] coinMarketList = restTemplate
+                    .getForObject(COINMARKETCAP_URL + country, CoinMarketCapTicker[].class);
 
             for (int i = 0; i < 4; i++) {
                 String coin_symbol = crypto_coins[i];
-                coinMarketList.getTickers()
-                        .stream()
+                Arrays.stream(coinMarketList)
                         .filter(ticker -> ticker.getSymbol().equals(coin_symbol))
                         .findFirst()
                         .ifPresent(ticker -> {
@@ -84,7 +80,7 @@ public class ScheduledTasks {
                         });
             }
 
-            arrayList.add(coinMarketList);
+            //arrayList.add(coinMarketList);
         }
 
         String summary = "";
