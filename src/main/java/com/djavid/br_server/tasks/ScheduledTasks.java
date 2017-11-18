@@ -4,21 +4,16 @@ import com.djavid.br_server.Codes;
 import com.djavid.br_server.model.entity.RegistrationToken;
 import com.djavid.br_server.model.entity.Subscribe;
 import com.djavid.br_server.model.entity.cryptonator.CoinMarketCapTicker;
-import com.djavid.br_server.model.entity.cryptonator.CoinMarketList;
-import com.djavid.br_server.model.entity.cryptonator.CryptonatorTicker;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.model.repository.SubscribeRepository;
 import com.djavid.br_server.push.AndroidPushNotificationsService;
-import com.sun.javafx.binding.StringFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -36,8 +31,6 @@ public class ScheduledTasks {
     private SubscribeRepository subscribeRepository;
     private AndroidPushNotificationsService androidPushNotificationsService;
     private RestTemplate restTemplate;
-
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
 
     public ScheduledTasks(RegistrationTokenRepository registrationTokenRepository,
@@ -104,21 +97,21 @@ public class ScheduledTasks {
     }
 
     private void sendPush(Subscribe subscribe, CoinMarketCapTicker ticker) {
-        log.info("Sending push notification...");
-
         RegistrationToken token = registrationTokenRepository.findOne(subscribe.getTokenId());
         String curr_full = Codes.getCurrencyFullName(subscribe.getCurrId());
-        String title = "Изменение цены " + curr_full;
 
+        String title = "Изменение цены " + curr_full;
         String desc;
 
         if (subscribe.isTrendingUp()) {
-            desc = "Цена " + curr_full + " выросла до " + StringFormatter.format("%.2f", ticker.getPrice())
+            desc = "Цена " + curr_full + " выросла до " + String.format("%.2f", ticker.getPrice())
                     + subscribe.getCountryId() + "!";
         } else {
-            desc = "Цена " + curr_full + " упала до " + StringFormatter.format("%.2f", ticker.getPrice())
+            desc = "Цена " + curr_full + " упала до " + String.format("%.2f", ticker.getPrice())
                     + subscribe.getCountryId() + "!";
         }
+
+        log.info("Sending push notification with title ='" + title + "' and body = '" + desc + "';");
 
         try {
             CompletableFuture<String> pushNotification = androidPushNotificationsService
