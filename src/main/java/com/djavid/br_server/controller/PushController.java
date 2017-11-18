@@ -1,22 +1,18 @@
 package com.djavid.br_server.controller;
 
-import java.util.Date;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
 
+import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.model.entity.RegistrationToken;
 import com.djavid.br_server.model.entity.Subscribe;
-import com.djavid.br_server.model.entity.TokenRegistrationResponse;
+import com.djavid.br_server.model.entity.ResponseId;
 import com.djavid.br_server.model.repository.SubscribeRepository;
 import com.djavid.br_server.push.AndroidPushNotificationsService;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -75,34 +71,46 @@ public class PushController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public TokenRegistrationResponse registerToken(@RequestParam("token") String device_id) {
+    public ResponseId registerToken(@RequestParam("token") String device_id) {
 
         if (device_id.equals(""))
-            return new TokenRegistrationResponse("Wrong device id!");
+            return new ResponseId("Wrong device id!");
 
         if (registrationTokenRepository.findRegistrationTokenByToken(device_id) != null)
-            return new TokenRegistrationResponse("Device id was already registered!");
+            return new ResponseId("Device id was already registered!");
 
         try {
-            registrationTokenRepository.save(new RegistrationToken(device_id));
+            Long id = registrationTokenRepository.save(new RegistrationToken(device_id)).id;
 
-            Long id = registrationTokenRepository.findRegistrationTokenByToken(device_id).id;
-            System.out.println("Saved token(" + device_id + ") with id(" + id + ")");
+//            Long id = registrationTokenRepository.findRegistrationTokenByToken(device_id).id;
+            BrServerApplication.log.info("Saved token(" + device_id + ") with id(" + id + ")");
 
-            return new TokenRegistrationResponse(id);
+            return new ResponseId(id);
         } catch (Exception e) {
-            return new TokenRegistrationResponse("Something gone wrong");
+            return new ResponseId("Something gone wrong");
         }
     }
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
-    public ResponseEntity<String> subscribe(@RequestBody Subscribe subscribe) {
+    public ResponseId subscribe(@RequestBody Subscribe subscribe) {
         if (subscribe == null)
-            return new ResponseEntity<>("Sent null entity!", HttpStatus.BAD_REQUEST);
+            return new ResponseId("Sent null entity!");
 
         try {
-            subscribeRepository.save(subscribe);
-            System.out.println("Saved " + subscribe.toString());
+            Long id = subscribeRepository.save(subscribe).getId();
+            BrServerApplication.log.info("Saved " + subscribe.toString());
+
+            return new ResponseId(id);
+        } catch (Exception e) {
+            return new ResponseId("Something gone wrong");
+        }
+    }
+
+    @RequestMapping(value = "/deleteSubscribe", method = RequestMethod.GET)
+    public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
+        try {
+            subscribeRepository.delete(id);
+            BrServerApplication.log.info("Deleted subscribe with id=" + id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);

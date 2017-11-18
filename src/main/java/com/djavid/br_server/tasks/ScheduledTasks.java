@@ -1,5 +1,6 @@
 package com.djavid.br_server.tasks;
 
+import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.Codes;
 import com.djavid.br_server.model.entity.RegistrationToken;
 import com.djavid.br_server.model.entity.Subscribe;
@@ -20,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Component
 public class ScheduledTasks {
-    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+
     private final static String CRYPTONATOR_URL = "https://api.cryptonator.com/api/full/";
     private final static String COINMARKETCAP_URL = "https://api.coinmarketcap.com/v1/ticker/?convert=";
 
@@ -69,7 +70,7 @@ public class ScheduledTasks {
         String summary = "";
         for (CoinMarketCapTicker ticker : pairs)
             summary += "{" + ticker.getCountry_symbol() + "-" + ticker.getSymbol() + " = " + ticker.getPrice() + "} ";
-        log.info(summary);
+        BrServerApplication.log.info(summary);
 
         Iterable<Subscribe> subscribes = subscribeRepository.findAll();
         subscribes.forEach(subscribe -> {
@@ -111,14 +112,14 @@ public class ScheduledTasks {
                     + subscribe.getCountryId() + "!";
         }
 
-        log.info("Sending push notification with title ='" + title + "' and body = '" + desc + "';");
+        BrServerApplication.log.info("Sending push notification with title ='" + title + "' and body = '" + desc + "';");
 
         try {
             CompletableFuture<String> pushNotification = androidPushNotificationsService
                     .send(token.token, title, desc);
             CompletableFuture.allOf(pushNotification).join();
             String firebaseResponse = pushNotification.get();
-            log.info(firebaseResponse);
+            BrServerApplication.log.info(firebaseResponse);
 
         } catch (Exception e) {
             e.printStackTrace();

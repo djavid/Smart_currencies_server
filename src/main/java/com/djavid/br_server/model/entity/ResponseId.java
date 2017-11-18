@@ -1,18 +1,18 @@
 package com.djavid.br_server.model.entity;
 
 
-public class TokenRegistrationResponse {
+public class ResponseId {
 
     public String error;
     public long id;
 
 
-    public TokenRegistrationResponse(long id) {
+    public ResponseId(long id) {
         this.id = id;
         error = "";
     }
 
-    public TokenRegistrationResponse(String error) {
+    public ResponseId(String error) {
         this.error = error;
     }
 }
