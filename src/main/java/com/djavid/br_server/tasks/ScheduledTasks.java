@@ -90,10 +90,12 @@ public class ScheduledTasks {
 
     private boolean checkForSending(Subscribe subscribe, CoinMarketCapTicker ticker) {
         Double sub_price = Double.parseDouble(subscribe.getValue());
-        if (subscribe.isTrendingUp())
+        //System.out.println(sub_price);
+        if (subscribe.isTrendingUp()) {
             if (ticker.getPrice() >= sub_price) return true;
-        else
+        } else {
             if (ticker.getPrice() <= sub_price) return true;
+        }
 
         return false;
     }
