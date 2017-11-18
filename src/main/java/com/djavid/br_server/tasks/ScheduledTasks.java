@@ -81,6 +81,7 @@ public class ScheduledTasks {
                     .ifPresent(pair -> {
                         if (checkForSending(subscribe, pair)) {
                             sendPush(subscribe, pair);
+                            subscribeRepository.delete(subscribe);
                         }
                     });
         });
@@ -105,10 +106,10 @@ public class ScheduledTasks {
         String desc;
 
         if (subscribe.isTrendingUp()) {
-            desc = "Цена " + curr_full + " выросла до " + String.format("%.2f", ticker.getPrice())
+            desc = "Цена " + curr_full + " выросла до " + String.format("%.2f", ticker.getPrice()) + " "
                     + subscribe.getCountryId() + "!";
         } else {
-            desc = "Цена " + curr_full + " упала до " + String.format("%.2f", ticker.getPrice())
+            desc = "Цена " + curr_full + " упала до " + String.format("%.2f", ticker.getPrice()) + " "
                     + subscribe.getCountryId() + "!";
         }
 
