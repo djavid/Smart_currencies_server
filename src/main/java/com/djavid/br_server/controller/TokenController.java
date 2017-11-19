@@ -45,6 +45,17 @@ public class TokenController {
         }
     }
 
+    @RequestMapping(value = "/deleteTokens", method = RequestMethod.GET)
+    public ResponseEntity<String> deleteAllTokens() {
+        try {
+            registrationTokenRepository.deleteAll();
+            BrServerApplication.log.info("Deleted all tokens");
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     @RequestMapping(value = "/registerToken", method = RequestMethod.GET)
     public ResponseId registerToken(@RequestParam("token") String device_id, @RequestParam("id") long db_id) {
@@ -53,7 +64,8 @@ public class TokenController {
             return new ResponseId("Wrong device id!");
 
         if (registrationTokenRepository.findRegistrationTokenByToken(device_id) != null)
-            return new ResponseId("Device id was already registered!");
+            return new ResponseId("Device id was already registered!",
+                    registrationTokenRepository.findRegistrationTokenByToken(device_id).id);
 
         try {
             if (db_id == 0) {

@@ -15,4 +15,9 @@ public class ResponseId {
     public ResponseId(String error) {
         this.error = error;
     }
+
+    public ResponseId(String error, long id) {
+        this.error = error;
+        this.id = id;
+    }
 }
