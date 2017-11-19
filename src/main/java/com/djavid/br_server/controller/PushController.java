@@ -33,7 +33,7 @@ public class PushController {
     @RequestMapping(value = "/send", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> send(@RequestParam("title") String title, @RequestParam("body") String desc) throws JSONException {
 
-        RegistrationToken token = registrationTokenRepository.findOne(1L);
+        RegistrationToken token = registrationTokenRepository.findAll().iterator().next();
 
         try {
             CompletableFuture<String> pushNotification = androidPushNotificationsService.send(token.token, title, desc);
