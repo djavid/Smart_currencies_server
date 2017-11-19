@@ -80,6 +80,12 @@ public class TokenController {
                 BrServerApplication.log.info("Updated token(" + device_id + ") with id(" + db_id + ")");
                 return new ResponseId(db_id);
 
+            } else if (registrationTokenRepository.findRegistrationTokenById(db_id) == null) {
+
+                Long id = registrationTokenRepository.save(new RegistrationToken(device_id)).id;
+                BrServerApplication.log.info("Saved token(" + device_id + ") with id(" + id + ")");
+                return new ResponseId(id);
+
             }
 
             return new ResponseId("Something gone wrong");
