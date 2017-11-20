@@ -81,7 +81,8 @@ public class ScheduledTasks {
                     .ifPresent(pair -> {
                         if (checkForSending(subscribe, pair)) {
                             sendPush(subscribe, pair);
-                            subscribeRepository.delete(subscribe);
+                            System.out.println(subscribe.toString());
+                            subscribeRepository.delete(subscribe); //TODO
                         }
                     });
         });
