@@ -16,6 +16,7 @@ public class Subscribe {
     private boolean isTrendingUp;
     private String value;
     private long tickerId;
+    private long tokenId;
     private String cryptoId;
     private String countryId;
 
@@ -27,6 +28,7 @@ public class Subscribe {
                 ", isTrendingUp=" + isTrendingUp +
                 ", value='" + value + '\'' +
                 ", tickerId=" + tickerId +
+                ", tokenId=" + tokenId +
                 ", cryptoId='" + cryptoId + '\'' +
                 ", countryId='" + countryId + '\'' +
                 '}';
@@ -74,5 +76,12 @@ public class Subscribe {
     }
     public void setCountryId(String countryId) {
         this.countryId = countryId;
+    }
+
+    public long getTokenId() {
+        return tokenId;
+    }
+    public void setTokenId(long tokenId) {
+        this.tokenId = tokenId;
     }
 }

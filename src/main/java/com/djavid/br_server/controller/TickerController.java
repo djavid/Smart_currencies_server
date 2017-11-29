@@ -2,11 +2,17 @@ package com.djavid.br_server.controller;
 
 import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.model.entity.ResponseId;
+import com.djavid.br_server.model.entity.Subscribe;
 import com.djavid.br_server.model.entity.Ticker;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.model.repository.SubscribeRepository;
 import com.djavid.br_server.model.repository.TickerRepository;
+import com.google.common.collect.Lists;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -17,7 +23,8 @@ public class TickerController {
     private final RegistrationTokenRepository tokenRepository;
 
 
-    public TickerController(TickerRepository tickerRepository, SubscribeRepository subscribeRepository, RegistrationTokenRepository tokenRepository) {
+    public TickerController(TickerRepository tickerRepository, SubscribeRepository subscribeRepository,
+                            RegistrationTokenRepository tokenRepository) {
         this.tickerRepository = tickerRepository;
         this.subscribeRepository = subscribeRepository;
         this.tokenRepository = tokenRepository;
@@ -31,6 +38,18 @@ public class TickerController {
     }
 
 
+    @RequestMapping(value = "/deleteTicker", method = RequestMethod.GET)
+    public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
+        try {
+            tickerRepository.delete(id);
+            BrServerApplication.log.info("Deleted ticker with id=" + id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     @RequestMapping(value = "/addTicker", method = RequestMethod.POST)
     public ResponseId subscribe(@RequestBody Ticker ticker) {
         if (ticker == null)
@@ -38,7 +57,7 @@ public class TickerController {
 
         try {
             Long id = tickerRepository.save(ticker).getId();
-            BrServerApplication.log.info("Saved " + ticker.toString());
+            BrServerApplication.log.info("Saved  " + ticker.toString());
 
             return new ResponseId(id);
         } catch (Exception e) {
@@ -50,6 +69,5 @@ public class TickerController {
     public Iterable<Ticker> getTickersByTokenId(@RequestParam("token_id") long token_id) {
         return tickerRepository.getTickersByTokenId(token_id);
     }
-
 
 }

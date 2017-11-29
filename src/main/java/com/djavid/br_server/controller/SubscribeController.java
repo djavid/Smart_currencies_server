@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 public class SubscribeController {
@@ -64,6 +66,11 @@ public class SubscribeController {
         } catch (Exception e) {
             return new ResponseId("Something gone wrong");
         }
+    }
+
+    @RequestMapping(value = "/getSubscribes", method = RequestMethod.GET)
+    public Iterable<Subscribe> getSubscribesByTokenId(@RequestParam("token_id") Long token_id) {
+        return subscribeRepository.findSubscribesByTokenId(token_id);
     }
 
 
