@@ -40,16 +40,16 @@ public class SubscribeController {
     }
 
 
-    @RequestMapping(value = "/deleteSubscribes", method = RequestMethod.GET)
-    public ResponseEntity<String> deleteAllSubscribes() {
-        try {
-            subscribeRepository.deleteAll();
-            BrServerApplication.log.info("Deleted all subscribes");
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @RequestMapping(value = "/deleteSubscribes", method = RequestMethod.GET)
+//    public ResponseEntity<String> deleteAllSubscribes() {
+//        try {
+//            subscribeRepository.deleteAll();
+//            BrServerApplication.log.info("Deleted all subscribes");
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)

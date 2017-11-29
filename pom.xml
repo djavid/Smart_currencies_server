@@ -77,6 +77,11 @@
             <version>1.5.8.RELEASE</version>
         </dependency>
 
+		<dependency>
+			<groupId>io.humble</groupId>
+			<artifactId>humble-video-all</artifactId>
+			<version>0.2.1</version>
+		</dependency>
 
 
     </dependencies>

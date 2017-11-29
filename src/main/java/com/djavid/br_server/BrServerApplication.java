@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableScheduling
 public class BrServerApplication {
 
-	public static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+	public static final Logger log = LoggerFactory.getLogger("bitcoinrate");
 
 	public static void main(String[] args) {
 		SpringApplication.run(BrServerApplication.class, args);
