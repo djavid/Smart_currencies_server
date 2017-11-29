@@ -46,7 +46,7 @@ public class TickerController {
         }
     }
 
-    @RequestMapping(value = "/getTickers")
+    @RequestMapping(value = "/getTickers", method = RequestMethod.GET)
     public Iterable<Ticker> getTickersByTokenId(@RequestParam("token_id") long token_id) {
         return tickerRepository.getTickersByTokenId(token_id);
     }
