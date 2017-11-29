@@ -17,4 +17,6 @@ public class RegistrationToken {
         this.token = token;
     }
 
+    public RegistrationToken() { }
+
 }
