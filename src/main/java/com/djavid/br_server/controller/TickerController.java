@@ -22,7 +22,7 @@ public class TickerController {
         this.subscribeRepository = subscribeRepository;
         this.tokenRepository = tokenRepository;
     }
-    
+
 
     @RequestMapping(value = "/getTickers/", method = RequestMethod.GET)
     @ResponseBody
