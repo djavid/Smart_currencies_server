@@ -11,12 +11,10 @@ public class RegistrationToken {
     @Id
     @GeneratedValue
     public long id;
-
     public String token;
 
     public RegistrationToken(String token) {
         this.token = token;
     }
 
-    public RegistrationToken() { }
 }

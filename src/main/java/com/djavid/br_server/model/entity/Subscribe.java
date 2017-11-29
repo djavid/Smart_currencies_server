@@ -13,42 +13,52 @@ public class Subscribe {
     @Id
     @GeneratedValue
     private long id;
-    private String currId;
-    private String countryId;
     private boolean isTrendingUp;
     private String value;
-    private long tokenId;
+    private Ticker ticker;
+
+    //private String currId;
+    //private String countryId;
+    //private RegistrationToken tokenId;
+
 
     @Override
     public String toString() {
         return "Subscribe{" +
-                "currId='" + currId + '\'' +
-                ", countryId='" + countryId + '\'' +
+                "id=" + id +
                 ", isTrendingUp=" + isTrendingUp +
                 ", value='" + value + '\'' +
-                ", tokenId=" + tokenId +
+                ", ticker=" + ticker +
                 '}';
     }
+
+    //    public String getCurrId() {
+//        return currId;
+//    }
+//    public void setCurrId(String currId) {
+//        this.currId = currId;
+//    }
+//
+//    public String getCountryId() {
+//        return countryId;
+//    }
+//    public void setCountryId(String countryId) {
+//        this.countryId = countryId;
+//    }
+
+//    public RegistrationToken getTokenId() {
+//        return tokenId;
+//    }
+//    public void setTokenId(RegistrationToken tokenId) {
+//        this.tokenId = tokenId;
+//    }
+
 
     public long getId() {
         return id;
     }
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getCurrId() {
-        return currId;
-    }
-    public void setCurrId(String currId) {
-        this.currId = currId;
-    }
-
-    public String getCountryId() {
-        return countryId;
-    }
-    public void setCountryId(String countryId) {
-        this.countryId = countryId;
     }
 
     @JsonProperty(value="isTrendingUp")
@@ -66,10 +76,11 @@ public class Subscribe {
         this.value = value;
     }
 
-    public long getTokenId() {
-        return tokenId;
+    public Ticker getTicker() {
+        return ticker;
     }
-    public void setTokenId(long tokenId) {
-        this.tokenId = tokenId;
+    public void setTicker(Ticker ticker) {
+        this.ticker = ticker;
     }
+
 }

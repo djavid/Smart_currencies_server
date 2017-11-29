@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CryptonatorTicker {
 
-    private Ticker ticker;
+    private TickerCryptonator tickerCryptonator;
     private Long timestamp;
     private Boolean success;
     private String error;
@@ -14,19 +14,19 @@ public class CryptonatorTicker {
 
     public CryptonatorTicker() { }
 
-    public CryptonatorTicker(Ticker ticker, Long timestamp, Boolean success, String error) {
+    public CryptonatorTicker(TickerCryptonator tickerCryptonator, Long timestamp, Boolean success, String error) {
         super();
-        this.ticker = ticker;
+        this.tickerCryptonator = tickerCryptonator;
         this.timestamp = timestamp;
         this.success = success;
         this.error = error;
     }
 
-    public Ticker getTicker() {
-        return ticker;
+    public TickerCryptonator getTickerCryptonator() {
+        return tickerCryptonator;
     }
-    public void setTicker(Ticker ticker) {
-        this.ticker = ticker;
+    public void setTickerCryptonator(TickerCryptonator tickerCryptonator) {
+        this.tickerCryptonator = tickerCryptonator;
     }
 
     public Long getTimestamp() {
@@ -53,7 +53,7 @@ public class CryptonatorTicker {
     @Override
     public String toString() {
         return "CryptonatorTicker{" +
-                "ticker=" + ticker +
+                "tickerCryptonator=" + tickerCryptonator +
                 ", timestamp=" + timestamp +
                 ", success=" + success +
                 ", error='" + error + '\'' +

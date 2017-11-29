@@ -6,7 +6,7 @@ import java.util.List;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Ticker {
+public class TickerCryptonator {
 
     private String base;
     private String target;
@@ -16,9 +16,9 @@ public class Ticker {
     private List<Market> markets = null;
 
 
-    public Ticker() { }
+    public TickerCryptonator() { }
 
-    public Ticker(String base, String target, double price, String volume, double change, List<Market> markets) {
+    public TickerCryptonator(String base, String target, double price, String volume, double change, List<Market> markets) {
         super();
         this.base = base;
         this.target = target;
@@ -72,7 +72,7 @@ public class Ticker {
 
     @Override
     public String toString() {
-        return "Ticker{" +
+        return "TickerCryptonator{" +
                 "base='" + base + '\'' +
                 ", target='" + target + '\'' +
                 ", price=" + price +

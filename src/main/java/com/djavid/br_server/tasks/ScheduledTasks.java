@@ -75,8 +75,8 @@ public class ScheduledTasks {
         Iterable<Subscribe> subscribes = subscribeRepository.findAll();
         subscribes.forEach(subscribe -> {
             pairs.stream()
-                    .filter(pair -> pair.getCountry_symbol().equals(subscribe.getCountryId())
-                            && pair.getSymbol().equals(subscribe.getCurrId()))
+                    .filter(pair -> pair.getCountry_symbol().equals(subscribe.getTicker().getCountryId())
+                            && pair.getSymbol().equals(subscribe.getTicker().getCurrId()))
                     .findFirst()
                     .ifPresent(pair -> {
                         if (checkForSending(subscribe, pair)) {
@@ -102,25 +102,24 @@ public class ScheduledTasks {
     }
 
     private void sendPush(Subscribe subscribe, CoinMarketCapTicker ticker) {
-        RegistrationToken token = registrationTokenRepository.findOne(subscribe.getTokenId());
-        String curr_full = Codes.getCurrencyFullName(subscribe.getCurrId());
+        String curr_full = Codes.getCurrencyFullName(subscribe.getTicker().getCurrId());
 
         String title = "Изменение цены " + curr_full;
         String desc;
 
         if (subscribe.isTrendingUp()) {
             desc = "Цена " + curr_full + " выросла до " + String.format("%.2f", ticker.getPrice()) + " "
-                    + subscribe.getCountryId() + "!";
+                    + subscribe.getTicker().getCountryId() + "!";
         } else {
             desc = "Цена " + curr_full + " упала до " + String.format("%.2f", ticker.getPrice()) + " "
-                    + subscribe.getCountryId() + "!";
+                    + subscribe.getTicker().getCountryId() + "!";
         }
 
         BrServerApplication.log.info("Sending push notification with title ='" + title + "' and body = '" + desc + "';");
 
         try {
             CompletableFuture<String> pushNotification = androidPushNotificationsService
-                    .send(token.token, title, desc);
+                    .send(subscribe.getTicker().getTokenId().token, title, desc);
             CompletableFuture.allOf(pushNotification).join();
             String firebaseResponse = pushNotification.get();
             BrServerApplication.log.info(firebaseResponse);
