@@ -15,7 +15,7 @@ public class SubscribeController {
     private final SubscribeRepository subscribeRepository;
 
 
-    public SubscribeController( SubscribeRepository subscribeRepository) {
+    public SubscribeController(SubscribeRepository subscribeRepository) {
         this.subscribeRepository = subscribeRepository;
     }
 

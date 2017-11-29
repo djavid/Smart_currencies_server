@@ -60,6 +60,7 @@ public class ScheduledTasks {
 
             for (int i = 0; i < 4; i++) {
                 String coin_symbol = crypto_coins[i];
+
                 Arrays.stream(coinMarketList)
                         .filter(ticker -> ticker.getSymbol().equals(coin_symbol))
                         .findFirst()
