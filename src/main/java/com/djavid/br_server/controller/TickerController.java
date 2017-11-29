@@ -22,12 +22,11 @@ public class TickerController {
         this.subscribeRepository = subscribeRepository;
         this.tokenRepository = tokenRepository;
     }
-
-
+    
 
     @RequestMapping(value = "/getTickers/", method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<Ticker> getSubscribes() {
+    public Iterable<Ticker> getAllTickers() {
         return tickerRepository.findAll();
     }
 
@@ -45,6 +44,11 @@ public class TickerController {
         } catch (Exception e) {
             return new ResponseId("Something gone wrong");
         }
+    }
+
+    @RequestMapping(value = "/getTickers")
+    public Iterable<Ticker> getTickersByTokenId(@RequestParam("token_id") long token_id) {
+        return tickerRepository.getTickersByTokenId(token_id);
     }
 
 
