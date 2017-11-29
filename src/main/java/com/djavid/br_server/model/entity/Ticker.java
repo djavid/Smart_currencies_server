@@ -3,7 +3,6 @@ package com.djavid.br_server.model.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.List;
 
 
 @Entity
@@ -13,7 +12,7 @@ public class Ticker {
     @GeneratedValue
     private long id;
     private long tokenId;
-    private String currId;
+    private String cryptoId;
     private String countryId;
 
 
@@ -22,7 +21,7 @@ public class Ticker {
         return "Ticker{" +
                 "id=" + id +
                 ", tokenId=" + tokenId +
-                ", currId='" + currId + '\'' +
+                ", cryptoId='" + cryptoId + '\'' +
                 ", countryId='" + countryId + '\'' +
                 '}';
     }
@@ -42,11 +41,11 @@ public class Ticker {
         this.tokenId = tokenId;
     }
 
-    public String getCurrId() {
-        return currId;
+    public String getCryptoId() {
+        return cryptoId;
     }
-    public void setCurrId(String currId) {
-        this.currId = currId;
+    public void setCryptoId(String cryptoId) {
+        this.cryptoId = cryptoId;
     }
 
     public String getCountryId() {

@@ -10,8 +10,6 @@ import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.model.repository.SubscribeRepository;
 import com.djavid.br_server.model.repository.TickerRepository;
 import com.djavid.br_server.push.AndroidPushNotificationsService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -83,7 +81,7 @@ public class ScheduledTasks {
             Ticker ticker = tickerRepository.findOne(subscribe.getTickerId());
             pairs.stream()
                     .filter(pair -> pair.getCountry_symbol().equals(ticker.getCountryId())
-                            && pair.getSymbol().equals(ticker.getCurrId()))
+                            && pair.getSymbol().equals(ticker.getCryptoId()))
                     .findFirst()
                     .ifPresent(pair -> {
                         if (checkForSending(subscribe, pair)) {
@@ -111,7 +109,7 @@ public class ScheduledTasks {
     private void sendPush(Subscribe subscribe, CoinMarketCapTicker capTicker) {
         Ticker ticker = tickerRepository.findOne(subscribe.getTickerId());
         RegistrationToken token = registrationTokenRepository.findOne(ticker.getTokenId());
-        String curr_full = Codes.getCurrencyFullName(ticker.getCurrId());
+        String curr_full = Codes.getCurrencyFullName(ticker.getCryptoId());
 
         String title = "Изменение цены " + curr_full;
         String desc;
