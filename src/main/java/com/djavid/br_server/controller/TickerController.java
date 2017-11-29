@@ -42,6 +42,7 @@ public class TickerController {
     public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
         try {
             tickerRepository.delete(id);
+            subscribeRepository.delete(subscribeRepository.findSubscribesByTickerId(id));
             BrServerApplication.log.info("Deleted ticker with id=" + id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
