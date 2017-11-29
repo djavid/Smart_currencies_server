@@ -3,7 +3,6 @@ package com.djavid.br_server.controller;
 import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.model.entity.ResponseId;
 import com.djavid.br_server.model.entity.Subscribe;
-import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.model.repository.SubscribeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

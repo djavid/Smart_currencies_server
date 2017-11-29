@@ -1,19 +1,17 @@
 package com.djavid.br_server.controller;
 
-import java.util.concurrent.CompletableFuture;
-
-import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.model.entity.RegistrationToken;
-import com.djavid.br_server.model.entity.Subscribe;
-import com.djavid.br_server.model.entity.ResponseId;
-import com.djavid.br_server.model.repository.SubscribeRepository;
-import com.djavid.br_server.push.AndroidPushNotificationsService;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
+import com.djavid.br_server.push.AndroidPushNotificationsService;
 import org.json.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController

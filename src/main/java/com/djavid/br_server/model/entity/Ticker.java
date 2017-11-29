@@ -12,10 +12,9 @@ public class Ticker {
     @Id
     @GeneratedValue
     private long id;
-    private RegistrationToken tokenId;
+    private long tokenId;
     private String currId;
     private String countryId;
-    private List<Subscribe> subscribesList;
 
 
     @Override
@@ -29,10 +28,10 @@ public class Ticker {
     }
 
 
-    public RegistrationToken getTokenId() {
+    public long getTokenId() {
         return tokenId;
     }
-    public void setTokenId(RegistrationToken tokenId) {
+    public void setTokenId(long tokenId) {
         this.tokenId = tokenId;
     }
 
@@ -50,10 +49,4 @@ public class Ticker {
         this.countryId = countryId;
     }
 
-    public List<Subscribe> getSubscribesList() {
-        return subscribesList;
-    }
-    public void setSubscribesList(List<Subscribe> subscribesList) {
-        this.subscribesList = subscribesList;
-    }
 }

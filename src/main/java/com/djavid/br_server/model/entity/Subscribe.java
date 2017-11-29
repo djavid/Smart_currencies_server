@@ -15,43 +15,11 @@ public class Subscribe {
     private long id;
     private boolean isTrendingUp;
     private String value;
-    private Ticker ticker;
+    private long tickerId;
 
     //private String currId;
     //private String countryId;
     //private RegistrationToken tokenId;
-
-
-    @Override
-    public String toString() {
-        return "Subscribe{" +
-                "id=" + id +
-                ", isTrendingUp=" + isTrendingUp +
-                ", value='" + value + '\'' +
-                ", ticker=" + ticker +
-                '}';
-    }
-
-    //    public String getCurrId() {
-//        return currId;
-//    }
-//    public void setCurrId(String currId) {
-//        this.currId = currId;
-//    }
-//
-//    public String getCountryId() {
-//        return countryId;
-//    }
-//    public void setCountryId(String countryId) {
-//        this.countryId = countryId;
-//    }
-
-//    public RegistrationToken getTokenId() {
-//        return tokenId;
-//    }
-//    public void setTokenId(RegistrationToken tokenId) {
-//        this.tokenId = tokenId;
-//    }
 
 
     public long getId() {
@@ -76,11 +44,10 @@ public class Subscribe {
         this.value = value;
     }
 
-    public Ticker getTicker() {
-        return ticker;
+    public long getTickerId() {
+        return tickerId;
     }
-    public void setTicker(Ticker ticker) {
-        this.ticker = ticker;
+    public void setTickerId(long tickerId) {
+        this.tickerId = tickerId;
     }
-
 }
