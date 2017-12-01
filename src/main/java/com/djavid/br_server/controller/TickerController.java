@@ -2,17 +2,13 @@ package com.djavid.br_server.controller;
 
 import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.model.entity.ResponseId;
-import com.djavid.br_server.model.entity.Subscribe;
 import com.djavid.br_server.model.entity.Ticker;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.model.repository.SubscribeRepository;
 import com.djavid.br_server.model.repository.TickerRepository;
-import com.google.common.collect.Lists;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -38,16 +34,9 @@ public class TickerController {
     }
 
 
-    @RequestMapping(value = "/deleteTicker", method = RequestMethod.GET)
-    public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
-        try {
-            tickerRepository.delete(id);
-            subscribeRepository.delete(subscribeRepository.findSubscribesByTickerId(id));
-            BrServerApplication.log.info("Deleted ticker with id=" + id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
-        }
+    @RequestMapping(value = "/getTickers", method = RequestMethod.GET)
+    public Iterable<Ticker> getTickersByTokenId(@RequestParam("token_id") long token_id) {
+        return tickerRepository.getTickersByTokenId(token_id);
     }
 
 
@@ -66,9 +55,17 @@ public class TickerController {
         }
     }
 
-    @RequestMapping(value = "/getTickers", method = RequestMethod.GET)
-    public Iterable<Ticker> getTickersByTokenId(@RequestParam("token_id") long token_id) {
-        return tickerRepository.getTickersByTokenId(token_id);
-    }
+
+//    @RequestMapping(value = "/deleteTicker", method = RequestMethod.GET)
+//    public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
+//        try {
+//            tickerRepository.delete(id);
+//            subscribeRepository.delete(subscribeRepository.findSubscribesByTickerId(id));
+//            BrServerApplication.log.info("Deleted ticker with id=" + id);
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 }

@@ -4,8 +4,6 @@ import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.model.entity.RegistrationToken;
 import com.djavid.br_server.model.entity.ResponseId;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -34,38 +32,16 @@ public class TokenController {
     }
 
 
-    @RequestMapping(value = "/deleteToken", method = RequestMethod.GET)
-    public ResponseEntity<String> deleteToken(@RequestParam("id") long id) {
-        try {
-            registrationTokenRepository.delete(id);
-            BrServerApplication.log.info("Deleted token with id=" + id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @RequestMapping(value = "/deleteTokens", method = RequestMethod.GET)
-    public ResponseEntity<String> deleteAllTokens() {
-        try {
-            registrationTokenRepository.deleteAll();
-            BrServerApplication.log.info("Deleted all tokens");
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-
     @RequestMapping(value = "/registerToken", method = RequestMethod.GET)
     public ResponseId registerToken(@RequestParam("token") String device_id, @RequestParam("id") long db_id) {
 
         if (device_id.equals(""))
             return new ResponseId("Wrong device id!");
 
-        if (registrationTokenRepository.findRegistrationTokenByToken(device_id) != null)
+        RegistrationToken registrationToken = registrationTokenRepository.findRegistrationTokenByToken(device_id);
+        if (registrationToken != null && registrationToken.token.equals(device_id))
             return new ResponseId("Device id was already registered!",
-                    registrationTokenRepository.findRegistrationTokenByToken(device_id).id);
+                    registrationToken.id);
 
         try {
             if (db_id == 0) {

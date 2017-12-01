@@ -4,11 +4,7 @@ import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.model.entity.ResponseId;
 import com.djavid.br_server.model.entity.Subscribe;
 import com.djavid.br_server.model.repository.SubscribeRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -29,28 +25,10 @@ public class SubscribeController {
     }
 
 
-    @RequestMapping(value = "/deleteSubscribe", method = RequestMethod.GET)
-    public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
-        try {
-            subscribeRepository.delete(id);
-            BrServerApplication.log.info("Deleted subscribe with id=" + id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
-        }
+    @RequestMapping(value = "/getSubscribes", method = RequestMethod.GET)
+    public Iterable<Subscribe> getSubscribesByTokenId(@RequestParam("token_id") Long token_id) {
+        return subscribeRepository.findSubscribesByTokenId(token_id);
     }
-
-
-//    @RequestMapping(value = "/deleteSubscribes", method = RequestMethod.GET)
-//    public ResponseEntity<String> deleteAllSubscribes() {
-//        try {
-//            subscribeRepository.deleteAll();
-//            BrServerApplication.log.info("Deleted all subscribes");
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
@@ -63,15 +41,22 @@ public class SubscribeController {
             BrServerApplication.log.info("Saved " + subscribe.toString());
 
             return new ResponseId(id);
+
         } catch (Exception e) {
             return new ResponseId("Something gone wrong");
         }
     }
 
-    @RequestMapping(value = "/getSubscribes", method = RequestMethod.GET)
-    public Iterable<Subscribe> getSubscribesByTokenId(@RequestParam("token_id") Long token_id) {
-        return subscribeRepository.findSubscribesByTokenId(token_id);
-    }
 
+//    @RequestMapping(value = "/deleteSubscribe", method = RequestMethod.GET)
+//    public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
+//        try {
+//            subscribeRepository.delete(id);
+//            BrServerApplication.log.info("Deleted subscribe with id=" + id);
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 }

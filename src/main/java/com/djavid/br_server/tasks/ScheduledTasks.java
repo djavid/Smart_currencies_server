@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -43,13 +42,13 @@ public class ScheduledTasks {
         this.androidPushNotificationsService = androidPushNotificationsService;
         this.subscribeRepository = subscribeRepository;
         this.tickerRepository = tickerRepository;
-        restTemplate = new RestTemplate();
+        this.restTemplate = new RestTemplate();
     }
 
 
     @Scheduled(fixedDelay = 30000)
     public void getCurrentRate() {
-        //List<CoinMarketList> arrayList = new ArrayList<>();
+
         List<CoinMarketCapTicker> pairs = new ArrayList<>();
 
         for (String country : country_coins) {
@@ -67,14 +66,13 @@ public class ScheduledTasks {
                             pairs.add(ticker);
                         });
             }
-
-            //arrayList.add(coinMarketList);
         }
 
-        String summary = "";
-        for (CoinMarketCapTicker ticker : pairs)
-            summary += "{" + ticker.getCountry_symbol() + "-" + ticker.getSymbol() + " = " + ticker.getPrice() + "} ";
-        BrServerApplication.log.info(summary);
+//        String summary = "";
+//        for (CoinMarketCapTicker ticker : pairs)
+//            summary += "{" + ticker.getCountry_symbol() + "-" + ticker.getSymbol() + " = " + ticker.getPrice() + "} ";
+//        BrServerApplication.log.info(summary);
+        BrServerApplication.log.info("Cryptorates updated at " + new Date(System.currentTimeMillis()));
 
         Iterable<Subscribe> subscribes = subscribeRepository.findAll();
         subscribes.forEach(subscribe -> {
@@ -86,8 +84,7 @@ public class ScheduledTasks {
                     .ifPresent(pair -> {
                         if (checkForSending(subscribe, pair)) {
                             sendPush(subscribe, pair);
-                            System.out.println(subscribe.toString());
-                            subscribeRepository.delete(subscribe); //TODO
+                            subscribeRepository.delete(subscribe);
                         }
                     });
         });
@@ -95,8 +92,9 @@ public class ScheduledTasks {
     }
 
     private boolean checkForSending(Subscribe subscribe, CoinMarketCapTicker ticker) {
+
         Double sub_price = Double.parseDouble(subscribe.getValue());
-        //System.out.println(sub_price);
+
         if (subscribe.isTrendingUp()) {
             if (ticker.getPrice() >= sub_price) return true;
         } else {
@@ -107,6 +105,7 @@ public class ScheduledTasks {
     }
 
     private void sendPush(Subscribe subscribe, CoinMarketCapTicker capTicker) {
+
         Ticker ticker = tickerRepository.findOne(subscribe.getTickerId());
         RegistrationToken token = registrationTokenRepository.findOne(ticker.getTokenId());
         String curr_full = Codes.getCurrencyFullName(ticker.getCryptoId());
