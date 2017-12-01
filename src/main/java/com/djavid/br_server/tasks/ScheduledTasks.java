@@ -72,6 +72,8 @@ public class ScheduledTasks {
 //        for (CoinMarketCapTicker ticker : pairs)
 //            summary += "{" + ticker.getCountry_symbol() + "-" + ticker.getSymbol() + " = " + ticker.getPrice() + "} ";
 //        BrServerApplication.log.info(summary);
+
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC+03:00"));
         BrServerApplication.log.info("Cryptorates updated at " + new Date(System.currentTimeMillis()));
 
         Iterable<Subscribe> subscribes = subscribeRepository.findAll();
