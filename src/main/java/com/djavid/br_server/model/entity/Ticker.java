@@ -2,6 +2,7 @@ package com.djavid.br_server.model.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class Ticker {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private long tokenId;
     private String cryptoId;

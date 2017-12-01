@@ -68,13 +68,7 @@ public class ScheduledTasks {
             }
         }
 
-//        String summary = "";
-//        for (CoinMarketCapTicker ticker : pairs)
-//            summary += "{" + ticker.getCountry_symbol() + "-" + ticker.getSymbol() + " = " + ticker.getPrice() + "} ";
-//        BrServerApplication.log.info(summary);
-
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC+03:00"));
-        BrServerApplication.log.info("Cryptorates updated at " + new Date(System.currentTimeMillis()));
+        logUpdate(pairs);
 
         Iterable<Subscribe> subscribes = subscribeRepository.findAll();
         subscribes.forEach(subscribe -> {
@@ -90,6 +84,17 @@ public class ScheduledTasks {
                         }
                     });
         });
+
+    }
+
+    private void logUpdate(List<CoinMarketCapTicker> pairs) {
+//        String summary = "";
+//        for (CoinMarketCapTicker ticker : pairs)
+//            summary += "{" + ticker.getCountry_symbol() + "-" + ticker.getSymbol() + " = " + ticker.getPrice() + "} ";
+//        BrServerApplication.log.info(summary);
+
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC+03:00"));
+        BrServerApplication.log.info("Cryptorates updated at " + new Date(System.currentTimeMillis()));
 
     }
 
