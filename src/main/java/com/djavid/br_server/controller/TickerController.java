@@ -56,16 +56,16 @@ public class TickerController {
     }
 
 
-//    @RequestMapping(value = "/deleteTicker", method = RequestMethod.GET)
-//    public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
-//        try {
-//            tickerRepository.delete(id);
-//            subscribeRepository.delete(subscribeRepository.findSubscribesByTickerId(id));
-//            BrServerApplication.log.info("Deleted ticker with id=" + id);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    @RequestMapping(value = "/deleteTicker", method = RequestMethod.GET)
+    public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
+        try {
+            tickerRepository.delete(id);
+            subscribeRepository.delete(subscribeRepository.findSubscribesByTickerId(id));
+            BrServerApplication.log.info("Deleted ticker with id=" + id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

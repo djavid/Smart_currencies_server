@@ -1,7 +1,16 @@
 package com.djavid.br_server;
 
 
-public class Codes {
+public class Config {
+
+    public final static long FIXED_DELAY = 30000; //delay of currencies rate updates
+
+    //API
+
+    public final static String CRYPTONATOR_URL = "https://api.cryptonator.com/api/full/";
+    public final static String COINMARKETCAP_URL = "https://api.coinmarketcap.com/v1/ticker/?convert=";
+
+    //CODES
 
     public static String[] country_codes = new String[]{
             "AED",	"AFN",	"ALL",	"AMD",	"ANG",	"AOA",	"ARS",	"AUD",	"AWG",	"AZN",

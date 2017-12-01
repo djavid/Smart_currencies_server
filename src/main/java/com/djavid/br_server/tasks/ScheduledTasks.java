@@ -1,7 +1,7 @@
 package com.djavid.br_server.tasks;
 
 import com.djavid.br_server.BrServerApplication;
-import com.djavid.br_server.Codes;
+import com.djavid.br_server.Config;
 import com.djavid.br_server.model.entity.RegistrationToken;
 import com.djavid.br_server.model.entity.Subscribe;
 import com.djavid.br_server.model.entity.Ticker;
@@ -17,15 +17,12 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import static com.djavid.br_server.Config.country_coins;
+import static com.djavid.br_server.Config.crypto_coins;
+
 
 @Component
 public class ScheduledTasks {
-
-    private final static String CRYPTONATOR_URL = "https://api.cryptonator.com/api/full/";
-    private final static String COINMARKETCAP_URL = "https://api.coinmarketcap.com/v1/ticker/?convert=";
-
-    private static String[] crypto_coins = {"BTC", "BCH", "LTC", "ETH", "NVC", "NMC", "PPC", "DOGE"};
-    private static String[] country_coins = {"USD", "EUR", "CAD", "CNY", "JPY", "PLN", "GBP", "RUB", "UAH"};
 
     private RegistrationTokenRepository registrationTokenRepository;
     private SubscribeRepository subscribeRepository;
@@ -46,14 +43,22 @@ public class ScheduledTasks {
     }
 
 
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(fixedDelay = Config.FIXED_DELAY)
     public void getCurrentRate() {
+
+        List<CoinMarketCapTicker> pairs = getCurrentPairs();
+        logUpdate(pairs);
+        notifyAllSubscribes(pairs);
+
+    }
+
+    private List<CoinMarketCapTicker> getCurrentPairs() {
 
         List<CoinMarketCapTicker> pairs = new ArrayList<>();
 
         for (String country : country_coins) {
             CoinMarketCapTicker[] coinMarketList = restTemplate
-                    .getForObject(COINMARKETCAP_URL + country, CoinMarketCapTicker[].class);
+                    .getForObject(Config.COINMARKETCAP_URL + country, CoinMarketCapTicker[].class);
 
             for (int i = 0; i < 4; i++) {
                 String coin_symbol = crypto_coins[i];
@@ -68,9 +73,13 @@ public class ScheduledTasks {
             }
         }
 
-        logUpdate(pairs);
+        return pairs;
+    }
+
+    private void notifyAllSubscribes(List<CoinMarketCapTicker> pairs) {
 
         Iterable<Subscribe> subscribes = subscribeRepository.findAll();
+
         subscribes.forEach(subscribe -> {
             Ticker ticker = tickerRepository.findOne(subscribe.getTickerId());
             pairs.stream()
@@ -115,7 +124,7 @@ public class ScheduledTasks {
 
         Ticker ticker = tickerRepository.findOne(subscribe.getTickerId());
         RegistrationToken token = registrationTokenRepository.findOne(ticker.getTokenId());
-        String curr_full = Codes.getCurrencyFullName(ticker.getCryptoId());
+        String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
 
         String title = "Изменение цены " + curr_full;
         String desc;
@@ -131,10 +140,10 @@ public class ScheduledTasks {
         BrServerApplication.log.info("Sending push notification with title ='" + title + "' and body = '" + desc + "';");
 
         try {
-            CompletableFuture<String> pushNotification = androidPushNotificationsService
-                    .send(token.token, title, desc);
+            CompletableFuture<String> pushNotification = androidPushNotificationsService.send(token.token, title, desc);
             CompletableFuture.allOf(pushNotification).join();
             String firebaseResponse = pushNotification.get();
+
             BrServerApplication.log.info(firebaseResponse);
 
         } catch (Exception e) {
