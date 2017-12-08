@@ -17,6 +17,8 @@ public class CurrencyUpdate {
     private double price;
 
 
+    public CurrencyUpdate() { }
+
     public CurrencyUpdate(String cryptoId, String countryId, double price) {
         this.cryptoId = cryptoId;
         this.countryId = countryId;
