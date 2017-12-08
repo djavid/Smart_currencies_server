@@ -32,7 +32,7 @@ public class CoinMarketCapTicker {
     private String country_symbol;
 
 
-    public Double getPrice(String id) {
+    private Double getPrice(String id) {
         switch (id) {
             case "USD":
                 return getPrice_usd();
@@ -146,70 +146,33 @@ public class CoinMarketCapTicker {
         this.last_updated = last_updated;
     }
 
-
-    public double getPrice_usd() {
+    private double getPrice_usd() {
         return price_usd;
     }
-    public void setPrice_usd(double price_usd) {
-        this.price_usd = price_usd;
-    }
-
-    public double getPrice_eur() {
+    private double getPrice_eur() {
         return price_eur;
     }
-    public void setPrice_eur(double price_eur) {
-        this.price_eur = price_eur;
-    }
-
-    public double getPrice_cad() {
+    private double getPrice_cad() {
         return price_cad;
     }
-    public void setPrice_cad(double price_cad) {
-        this.price_cad = price_cad;
-    }
-
-    public double getPrice_cny() {
+    private double getPrice_cny() {
         return price_cny;
     }
-    public void setPrice_cny(double price_cny) {
-        this.price_cny = price_cny;
-    }
-
-    public double getPrice_jpy() {
+    private double getPrice_jpy() {
         return price_jpy;
     }
-    public void setPrice_jpy(double price_jpy) {
-        this.price_jpy = price_jpy;
-    }
-
-    public double getPrice_pln() {
+    private double getPrice_pln() {
         return price_pln;
     }
-    public void setPrice_pln(double price_pln) {
-        this.price_pln = price_pln;
-    }
-
-    public double getPrice_gbp() {
+    private double getPrice_gbp() {
         return price_gbp;
     }
-    public void setPrice_gbp(double price_gbp) {
-        this.price_gbp = price_gbp;
-    }
-
-    public double getPrice_rub() {
+    private double getPrice_rub() {
         return price_rub;
     }
-    public void setPrice_rub(double price_rub) {
-        this.price_rub = price_rub;
-    }
-
-    public double getPrice_uah() {
+    private double getPrice_uah() {
         return price_uah;
     }
-    public void setPrice_uah(double price_uah) {
-        this.price_uah = price_uah;
-    }
-
 
     public String getCountry_symbol() {
         return country_symbol;

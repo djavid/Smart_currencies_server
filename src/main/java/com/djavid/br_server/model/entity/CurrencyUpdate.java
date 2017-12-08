@@ -4,30 +4,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.List;
 
 
 @Entity
-public class Ticker {
+public class CurrencyUpdate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private long tokenId;
     private String cryptoId;
     private String countryId;
     private double price;
 
 
-    @Override
-    public String toString() {
-        return "Ticker{" +
-                "id=" + id +
-                ", tokenId=" + tokenId +
-                ", cryptoId='" + cryptoId + '\'' +
-                ", countryId='" + countryId + '\'' +
-                ", price=" + price +
-                '}';
+    public CurrencyUpdate(String cryptoId, String countryId, double price) {
+        this.cryptoId = cryptoId;
+        this.countryId = countryId;
+        this.price = price;
     }
 
 
@@ -36,13 +29,6 @@ public class Ticker {
     }
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getTokenId() {
-        return tokenId;
-    }
-    public void setTokenId(long tokenId) {
-        this.tokenId = tokenId;
     }
 
     public String getCryptoId() {

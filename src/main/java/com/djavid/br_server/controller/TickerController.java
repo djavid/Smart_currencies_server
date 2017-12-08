@@ -1,8 +1,10 @@
 package com.djavid.br_server.controller;
 
 import com.djavid.br_server.BrServerApplication;
+import com.djavid.br_server.model.entity.CurrencyUpdate;
 import com.djavid.br_server.model.entity.ResponseId;
 import com.djavid.br_server.model.entity.Ticker;
+import com.djavid.br_server.model.repository.CurrencyUpdateRepository;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.model.repository.SubscribeRepository;
 import com.djavid.br_server.model.repository.TickerRepository;
@@ -17,13 +19,15 @@ public class TickerController {
     private final TickerRepository tickerRepository;
     private final SubscribeRepository subscribeRepository;
     private final RegistrationTokenRepository tokenRepository;
+    private final CurrencyUpdateRepository currencyUpdateRepository;
 
 
     public TickerController(TickerRepository tickerRepository, SubscribeRepository subscribeRepository,
-                            RegistrationTokenRepository tokenRepository) {
+                            RegistrationTokenRepository tokenRepository, CurrencyUpdateRepository currencyUpdateRepository) {
         this.tickerRepository = tickerRepository;
         this.subscribeRepository = subscribeRepository;
         this.tokenRepository = tokenRepository;
+        this.currencyUpdateRepository = currencyUpdateRepository;
     }
 
 
@@ -36,7 +40,16 @@ public class TickerController {
 
     @RequestMapping(value = "/getTickers", method = RequestMethod.GET)
     public Iterable<Ticker> getTickersByTokenId(@RequestParam("token_id") long token_id) {
-        return tickerRepository.getTickersByTokenId(token_id);
+        Iterable<Ticker> tickers = tickerRepository.getTickersByTokenId(token_id);
+        for (Ticker ticker : tickers) {
+            CurrencyUpdate currencyUpdate = currencyUpdateRepository
+                    .findCurrencyUpdateByCryptoIdAndCountryId(ticker.getCryptoId(), ticker.getCountryId());
+
+            if (currencyUpdate != null)
+                ticker.setPrice(currencyUpdate.getPrice());
+        }
+
+        return tickers;
     }
 
 

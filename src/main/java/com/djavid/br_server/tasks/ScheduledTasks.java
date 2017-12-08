@@ -2,10 +2,12 @@ package com.djavid.br_server.tasks;
 
 import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.Config;
+import com.djavid.br_server.model.entity.CurrencyUpdate;
 import com.djavid.br_server.model.entity.RegistrationToken;
 import com.djavid.br_server.model.entity.Subscribe;
 import com.djavid.br_server.model.entity.Ticker;
 import com.djavid.br_server.model.entity.cryptonator.CoinMarketCapTicker;
+import com.djavid.br_server.model.repository.CurrencyUpdateRepository;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.model.repository.SubscribeRepository;
 import com.djavid.br_server.model.repository.TickerRepository;
@@ -27,6 +29,8 @@ public class ScheduledTasks {
     private RegistrationTokenRepository registrationTokenRepository;
     private SubscribeRepository subscribeRepository;
     private TickerRepository tickerRepository;
+    private CurrencyUpdateRepository currencyUpdateRepository;
+
     private AndroidPushNotificationsService androidPushNotificationsService;
     private RestTemplate restTemplate;
 
@@ -34,11 +38,13 @@ public class ScheduledTasks {
     public ScheduledTasks(RegistrationTokenRepository registrationTokenRepository,
                           SubscribeRepository subscribeRepository,
                           TickerRepository tickerRepository,
+                          CurrencyUpdateRepository currencyUpdateRepository,
                           AndroidPushNotificationsService androidPushNotificationsService) {
         this.registrationTokenRepository = registrationTokenRepository;
         this.androidPushNotificationsService = androidPushNotificationsService;
         this.subscribeRepository = subscribeRepository;
         this.tickerRepository = tickerRepository;
+        this.currencyUpdateRepository = currencyUpdateRepository;
         this.restTemplate = new RestTemplate();
     }
 
@@ -47,9 +53,25 @@ public class ScheduledTasks {
     public void getCurrentRate() {
 
         List<CoinMarketCapTicker> pairs = getCurrentPairs();
+
+        saveUpdatesToRepository(pairs);
         logUpdate(pairs);
         notifyAllSubscribes(pairs);
 
+    }
+
+    private void saveUpdatesToRepository(List<CoinMarketCapTicker> pairs) {
+
+        for (CoinMarketCapTicker ticker : pairs) {
+            CurrencyUpdate currencyUpdate = currencyUpdateRepository
+                    .findCurrencyUpdateByCryptoIdAndCountryId(ticker.getSymbol(), ticker.getCountry_symbol());
+            if (currencyUpdate == null) {
+                currencyUpdateRepository.save(
+                        new CurrencyUpdate(ticker.getSymbol(), ticker.getCountry_symbol(), ticker.getPrice()));
+            } else {
+                currencyUpdate.setPrice(ticker.getPrice());
+            }
+        }
     }
 
     private List<CoinMarketCapTicker> getCurrentPairs() {
@@ -59,6 +81,8 @@ public class ScheduledTasks {
         for (String country : country_coins) {
             CoinMarketCapTicker[] coinMarketList = restTemplate
                     .getForObject(Config.COINMARKETCAP_URL + country, CoinMarketCapTicker[].class);
+
+
 
             for (int i = 0; i < 4; i++) {
                 String coin_symbol = crypto_coins[i];
