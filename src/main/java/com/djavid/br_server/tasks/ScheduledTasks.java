@@ -65,11 +65,13 @@ public class ScheduledTasks {
         for (CoinMarketCapTicker ticker : pairs) {
             CurrencyUpdate currencyUpdate = currencyUpdateRepository
                     .findCurrencyUpdateByCryptoIdAndCountryId(ticker.getSymbol(), ticker.getCountry_symbol());
+
             if (currencyUpdate == null) {
                 currencyUpdateRepository.save(
                         new CurrencyUpdate(ticker.getSymbol(), ticker.getCountry_symbol(), ticker.getPrice()));
             } else {
                 currencyUpdate.setPrice(ticker.getPrice());
+                currencyUpdateRepository.save(currencyUpdate);
             }
         }
     }
