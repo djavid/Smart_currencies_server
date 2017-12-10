@@ -20,6 +20,7 @@ public class Subscribe {
     private long tokenId;
     private String cryptoId;
     private String countryId;
+    private double change_percent;
 
 
     @Override
@@ -32,6 +33,7 @@ public class Subscribe {
                 ", tokenId=" + tokenId +
                 ", cryptoId='" + cryptoId + '\'' +
                 ", countryId='" + countryId + '\'' +
+                ", change_percent=" + change_percent +
                 '}';
     }
 
@@ -84,5 +86,12 @@ public class Subscribe {
     }
     public void setTokenId(long tokenId) {
         this.tokenId = tokenId;
+    }
+
+    public double getChange_percent() {
+        return change_percent;
+    }
+    public void setChange_percent(double change_percent) {
+        this.change_percent = change_percent;
     }
 }

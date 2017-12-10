@@ -113,10 +113,18 @@ public class ScheduledTasks {
                             && pair.getSymbol().equals(ticker.getCryptoId()))
                     .findFirst()
                     .ifPresent(pair -> {
+
                         if (checkForSending(subscribe, pair)) {
                             sendPush(subscribe, pair);
-                            subscribeRepository.delete(subscribe);
+
+                            if (subscribe.getChange_percent() > 0) {
+                                subscribe.setValue(pair.getPrice().toString());
+                                subscribeRepository.save(subscribe);
+                            } else {
+                                subscribeRepository.delete(subscribe);
+                            }
                         }
+                        
                     });
         });
 
@@ -137,10 +145,21 @@ public class ScheduledTasks {
 
         Double sub_price = Double.parseDouble(subscribe.getValue());
 
-        if (subscribe.isTrendingUp()) {
-            if (ticker.getPrice() >= sub_price) return true;
+        if (subscribe.getChange_percent() > 0) {
+
+            double needed_change = ticker.getPrice() * subscribe.getChange_percent();
+            double actual_change = Math.abs(ticker.getPrice() - sub_price);
+
+            if (actual_change > needed_change) return true;
+
         } else {
-            if (ticker.getPrice() <= sub_price) return true;
+
+            if (subscribe.isTrendingUp()) {
+                if (ticker.getPrice() >= sub_price) return true;
+            } else {
+                if (ticker.getPrice() <= sub_price) return true;
+            }
+
         }
 
         return false;
@@ -153,15 +172,7 @@ public class ScheduledTasks {
         String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
 
         String title = "Изменение цены " + curr_full;
-        String desc;
-
-        if (subscribe.isTrendingUp()) {
-            desc = "Цена " + curr_full + " выросла до " + String.format("%.2f", capTicker.getPrice()) + " "
-                    + ticker.getCountryId() + "!";
-        } else {
-            desc = "Цена " + curr_full + " упала до " + String.format("%.2f", capTicker.getPrice()) + " "
-                    + ticker.getCountryId() + "!";
-        }
+        String desc = getPushDescription(subscribe, capTicker, ticker);
 
         BrServerApplication.log.info("Sending push notification with title ='" + title + "' and body = '" + desc + "';");
 
@@ -175,6 +186,35 @@ public class ScheduledTasks {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getPushDescription(Subscribe subscribe, CoinMarketCapTicker capTicker, Ticker ticker) {
+
+        String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
+        String desc = "";
+
+        if (subscribe.getChange_percent() > 0) {
+
+            if (capTicker.getPrice() > Double.parseDouble(subscribe.getValue()))
+                desc = "Цена " + curr_full + " выросла более чем на " + subscribe.getChange_percent() * 100
+                        + "% до " + String.format("%.2f", capTicker.getPrice()) + " "
+                        + ticker.getCountryId() + "!";
+            else
+                desc = "Цена " + curr_full + " упала более чем на " + subscribe.getChange_percent() * 100
+                        + "% до " + String.format("%.2f", capTicker.getPrice()) + " "
+                        + ticker.getCountryId() + "!";
+
+        } else {
+            if (subscribe.isTrendingUp()) {
+                desc = "Цена " + curr_full + " выросла до " + String.format("%.2f", capTicker.getPrice()) + " "
+                        + ticker.getCountryId() + "!";
+            } else {
+                desc = "Цена " + curr_full + " упала до " + String.format("%.2f", capTicker.getPrice()) + " "
+                        + ticker.getCountryId() + "!";
+            }
+        }
+
+        return desc;
     }
 
 }
