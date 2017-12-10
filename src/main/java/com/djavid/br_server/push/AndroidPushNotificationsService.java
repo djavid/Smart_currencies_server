@@ -49,8 +49,9 @@ public class AndroidPushNotificationsService {
         JSONObject body = new JSONObject();
         body.put("to", device_id);
         body.put("priority", "high");
-        body.put("notification", notification);
-        body.put("data", data);
+        //body.put("notification", notification);
+        //body.put("data", data);
+        body.put("data", notification);
 
         OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
         os.write(body.toString());

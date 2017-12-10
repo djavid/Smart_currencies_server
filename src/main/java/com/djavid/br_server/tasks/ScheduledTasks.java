@@ -124,7 +124,7 @@ public class ScheduledTasks {
                                 subscribeRepository.delete(subscribe);
                             }
                         }
-                        
+
                     });
         });
 
