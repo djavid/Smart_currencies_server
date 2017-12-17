@@ -84,17 +84,15 @@ public class ScheduledTasks {
             CoinMarketCapTicker[] coinMarketList = restTemplate
                     .getForObject(Config.COINMARKETCAP_URL + country, CoinMarketCapTicker[].class);
             CoinMarketCapTicker[] coinMarketList2 = restTemplate
-                    .getForObject(Config.COINMARKETCAP_URL2 + country, CoinMarketCapTicker[].class);
+                    .getForObject(Config.COINMARKETCAP_URL + country + "&start=100", CoinMarketCapTicker[].class);
             CoinMarketCapTicker[] coinMarketList3 = restTemplate
-                    .getForObject(Config.COINMARKETCAP_URL2 + country, CoinMarketCapTicker[].class);
+                    .getForObject(Config.COINMARKETCAP_URL + country + "&start=200", CoinMarketCapTicker[].class);
 
             List<CoinMarketCapTicker> list = new ArrayList<>(Arrays.asList(coinMarketList));
             list.addAll(Arrays.asList(coinMarketList2));
             list.addAll(Arrays.asList(coinMarketList3));
 
-
             for (String coin_symbol : crypto_coins) {
-
                 list.stream()
                         .filter(ticker -> ticker.getSymbol().equals(coin_symbol))
                         .findFirst()

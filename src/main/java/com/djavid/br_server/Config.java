@@ -9,7 +9,6 @@ public class Config {
 
     public final static String CRYPTONATOR_URL = "https://api.cryptonator.com/api/full/";
     public final static String COINMARKETCAP_URL = "https://api.coinmarketcap.com/v1/ticker/?convert=";
-    public final static String COINMARKETCAP_URL2 = "https://api.coinmarketcap.com/v1/ticker/?start=100&convert=";
 
     //CODES
 
