@@ -9,6 +9,7 @@ public class Config {
 
     public final static String CRYPTONATOR_URL = "https://api.cryptonator.com/api/full/";
     public final static String COINMARKETCAP_URL = "https://api.coinmarketcap.com/v1/ticker/?convert=";
+    public final static String COINMARKETCAP_URL2 = "https://api.coinmarketcap.com/v1/ticker/?start=100&convert=";
 
     //CODES
 
@@ -32,7 +33,7 @@ public class Config {
             "ZMW",	"ZWD"
     };
 
-    public static String[] crypto_coins = {"BTC", "BCH", "LTC", "ETH", "NVC", "NMC", "PPC", "DOGE"};
+    public static String[] crypto_coins = {"BTC", "BCH", "XRP", "LTC", "ETH", "NVC", "NMC", "PPC", "DOGE"};
 
     public static String[] country_coins = {"USD", "EUR", "CAD", "CNY", "JPY", "PLN", "GBP", "RUB", "UAH"};
 
