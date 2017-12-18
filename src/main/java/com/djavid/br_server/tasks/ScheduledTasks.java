@@ -19,9 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import static com.djavid.br_server.Config.country_coins;
-import static com.djavid.br_server.Config.crypto_coins;
-import static com.djavid.br_server.Config.crypto_coins_array;
+import static com.djavid.br_server.Config.*;
 
 
 @Component
@@ -204,19 +202,19 @@ public class ScheduledTasks {
 
             if (capTicker.getPrice() > Double.parseDouble(subscribe.getValue()))
                 desc = "Цена " + curr_full + " выросла более чем на " + subscribe.getChange_percent() * 100
-                        + "% до " + String.format("%.2f", capTicker.getPrice()) + " "
+                        + "% до " + convertPrice(capTicker.getPrice()) + " "
                         + ticker.getCountryId() + "!";
             else
                 desc = "Цена " + curr_full + " упала более чем на " + subscribe.getChange_percent() * 100
-                        + "% до " + String.format("%.2f", capTicker.getPrice()) + " "
+                        + "% до " + convertPrice(capTicker.getPrice()) + " "
                         + ticker.getCountryId() + "!";
 
         } else {
             if (subscribe.isTrendingUp()) {
-                desc = "Цена " + curr_full + " выросла до " + String.format("%.2f", capTicker.getPrice()) + " "
+                desc = "Цена " + curr_full + " выросла до " + convertPrice(capTicker.getPrice()) + " "
                         + ticker.getCountryId() + "!";
             } else {
-                desc = "Цена " + curr_full + " упала до " + String.format("%.2f", capTicker.getPrice()) + " "
+                desc = "Цена " + curr_full + " упала до " + convertPrice(capTicker.getPrice()) + " "
                         + ticker.getCountryId() + "!";
             }
         }

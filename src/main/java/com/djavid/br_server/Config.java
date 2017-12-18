@@ -1,5 +1,7 @@
 package com.djavid.br_server;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,6 +67,38 @@ public class Config {
         }
     }
 
+    public static String convertPrice(double price) {
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
+        symbols.setGroupingSeparator(' ');
+
+        DecimalFormat formatter = new DecimalFormat(getPattern(price), symbols);
+
+        return formatter.format(price);
+    }
+
+    private static String getPattern(Double price) {
+
+        if (price < 1) {
+            return "###,###.######";
+        } else
+        if (price >= 1 && price < 10) {
+            return "###,###.###";
+        } else
+        if (price >= 10 && price < 100) {
+            return "###,###.##";
+        } else
+        if (price >= 100 && price < 1000) {
+            return "###,###.##";
+        } else
+        if (price >= 1000 && price < 10000) {
+            return "###,###.##";
+        } else
+        if (price >= 10000 && price < 100000) {
+            return "###,###.#";
+        } else { //if (price > 100000)
+            return "###,###";
+        }
+    }
 
     public static String getCurrencyFullName(String code) {
         switch (code) {
