@@ -174,7 +174,7 @@ public class ScheduledTasks {
 
         Ticker ticker = tickerRepository.findOne(subscribe.getTickerId());
         RegistrationToken token = registrationTokenRepository.findOne(ticker.getTokenId());
-        String curr_full = capTicker.getId();
+        String curr_full = capitalize(capTicker.getId());
         //String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
 
         String title = "Изменение цены " + curr_full;
@@ -196,7 +196,7 @@ public class ScheduledTasks {
 
     private String getPushDescription(Subscribe subscribe, CoinMarketCapTicker capTicker, Ticker ticker) {
 
-        String curr_full = capTicker.getId();
+        String curr_full = capitalize(capTicker.getId());
         //String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
         String desc = "";
 
@@ -222,6 +222,10 @@ public class ScheduledTasks {
         }
 
         return desc;
+    }
+
+    private String capitalize(final String line) {
+        return Character.toUpperCase(line.charAt(0)) + line.substring(1);
     }
 
 }
