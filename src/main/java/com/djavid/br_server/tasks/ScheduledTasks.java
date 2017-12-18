@@ -136,13 +136,13 @@ public class ScheduledTasks {
     }
 
     private void logUpdate(List<CoinMarketCapTicker> pairs) {
-        String summary = "";
-        for (CoinMarketCapTicker ticker : pairs)
-            summary += "{" + ticker.getCountry_symbol() + "-" + ticker.getSymbol() + " = " + ticker.getPrice() + "} ";
-        BrServerApplication.log.info(summary);
+//        String summary = "";
+//        for (CoinMarketCapTicker ticker : pairs)
+//            summary += "{" + ticker.getCountry_symbol() + "-" + ticker.getSymbol() + " = " + ticker.getPrice() + "} ";
+//        BrServerApplication.log.info(summary);
 
-//        TimeZone.setDefault(TimeZone.getTimeZone("UTC+03:00"));
-//        BrServerApplication.log.info("Cryptorates updated at " + new Date(System.currentTimeMillis()));
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC+03:00"));
+        BrServerApplication.log.info("Cryptorates updated at " + new Date(System.currentTimeMillis()));
 
     }
 
