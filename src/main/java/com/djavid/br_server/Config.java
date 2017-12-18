@@ -1,17 +1,17 @@
 package com.djavid.br_server;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 public class Config {
 
     public final static long FIXED_DELAY = 30000; //delay of currencies rate updates
 
     //API
-
-    public final static String CRYPTONATOR_URL = "https://api.cryptonator.com/api/full/";
     public final static String COINMARKETCAP_URL = "https://api.coinmarketcap.com/v1/ticker/?convert=";
 
     //CODES
-
     public static String[] country_codes = new String[]{
             "AED",	"AFN",	"ALL",	"AMD",	"ANG",	"AOA",	"ARS",	"AUD",	"AWG",	"AZN",
             "BAM",	"BBD",	"BDT",	"BGN",	"BHD",	"BIF",	"BMD",	"BND",	"BOB",	"BRL",
@@ -32,9 +32,39 @@ public class Config {
             "ZMW",	"ZWD"
     };
 
-    public static String[] crypto_coins = {"BTC", "BCH", "XRP", "LTC", "ETH", "NVC", "NMC", "PPC", "DOGE"};
+    public static Coin[] crypto_coins = {
+            new Coin("BTC", "bitcoin"), new Coin("BCH", "bitcoin-cash"), new Coin("XRP", "ripple"),
+            new Coin("LTC", "litecoin"), new Coin("ETH", "ethereum"), new Coin("NVC", "novacoin"),
+            new Coin("NMC", "namecoin"), new Coin("PPC", "peercoin"), new Coin("DOGE", "dogecoin"),
+            new Coin("DASH", "dash"), new Coin("XEM", "nem"), new Coin("XMR", "monero"),
+            new Coin("BTG", "bitcoin-gold"), new Coin("EOS", "eos"), new Coin("NEO", "neo"),
+            new Coin("ETC", "ethereum-classic"), new Coin("ZEC", "zcash"), new Coin("WAVES", "waves"),
+            new Coin("USDT", "tether"), new Coin("NXT", "nxt"), new Coin("XVG", "verge"),
+            new Coin("STEEM", "steem"), new Coin("XLM", "stellar"), new Coin("BCN", "bytecoin-bcn"),
+            new Coin("STRAT", "stratis"), new Coin("TRX", "tron"), new Coin("ADA", "cardano"),
+            new Coin("MIOTA", "iota"), new Coin("BTS", "bitshares"), new Coin("ARDR", "ardor")
+    };
+
+    public static String[] crypto_coins_array = Stream
+            .of(crypto_coins)
+            .map(coin -> coin.symbol)
+            .sorted()
+            .collect(Collectors.toList())
+            .toArray(new String[crypto_coins.length]);
 
     public static String[] country_coins = {"USD", "EUR", "CAD", "CNY", "JPY", "PLN", "GBP", "RUB", "UAH"};
+
+
+    public static class Coin {
+        public String symbol;
+        public String id;
+
+        Coin(String symbol, String id) {
+            this.symbol = symbol;
+            this.id = id;
+        }
+    }
+
 
     public static String getCurrencyFullName(String code) {
         switch (code) {
@@ -100,6 +130,8 @@ public class Config {
                 return "Novacoin";
             case "PPC":
                 return "Peercoin";
+            case "XRP":
+                return "Ripple";
             default:
                 return ";";
         }
@@ -123,6 +155,8 @@ public class Config {
                 return "peercoin";
             case "BCH":
                 return "bitcoin-cash";
+            case "XRP":
+                return "ripple";
             default:
                 return "";
         }

@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.djavid.br_server.Config.country_coins;
 import static com.djavid.br_server.Config.crypto_coins;
+import static com.djavid.br_server.Config.crypto_coins_array;
 
 
 @Component
@@ -92,7 +93,7 @@ public class ScheduledTasks {
             list.addAll(Arrays.asList(coinMarketList2));
             list.addAll(Arrays.asList(coinMarketList3));
 
-            for (String coin_symbol : crypto_coins) {
+            for (String coin_symbol : crypto_coins_array) {
                 list.stream()
                         .filter(ticker -> ticker.getSymbol().equals(coin_symbol))
                         .findFirst()
@@ -173,7 +174,8 @@ public class ScheduledTasks {
 
         Ticker ticker = tickerRepository.findOne(subscribe.getTickerId());
         RegistrationToken token = registrationTokenRepository.findOne(ticker.getTokenId());
-        String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
+        String curr_full = capTicker.getId();
+        //String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
 
         String title = "Изменение цены " + curr_full;
         String desc = getPushDescription(subscribe, capTicker, ticker);
@@ -194,7 +196,8 @@ public class ScheduledTasks {
 
     private String getPushDescription(Subscribe subscribe, CoinMarketCapTicker capTicker, Ticker ticker) {
 
-        String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
+        String curr_full = capTicker.getId();
+        //String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
         String desc = "";
 
         if (subscribe.getChange_percent() > 0) {
