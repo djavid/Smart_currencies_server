@@ -12,7 +12,7 @@ import javax.persistence.Id;
 public class RegistrationToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
     public String token;
 
