@@ -88,10 +88,13 @@ public class ScheduledTasks {
                     .getForObject(Config.COINMARKETCAP_URL + country + "&start=100", CoinMarketCapTicker[].class);
             CoinMarketCapTicker[] coinMarketList3 = restTemplate
                     .getForObject(Config.COINMARKETCAP_URL + country + "&start=200", CoinMarketCapTicker[].class);
+            CoinMarketCapTicker[] coinMarketList4 = restTemplate
+                    .getForObject(Config.COINMARKETCAP_URL + country + "&start=300", CoinMarketCapTicker[].class);
 
             List<CoinMarketCapTicker> list = new ArrayList<>(Arrays.asList(coinMarketList));
             list.addAll(Arrays.asList(coinMarketList2));
             list.addAll(Arrays.asList(coinMarketList3));
+            list.addAll(Arrays.asList(coinMarketList4));
 
             for (String coin_symbol : crypto_coins_array) {
                 list.stream()
