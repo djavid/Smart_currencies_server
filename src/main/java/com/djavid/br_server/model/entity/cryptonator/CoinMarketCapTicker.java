@@ -9,6 +9,8 @@ public class CoinMarketCapTicker {
     private String id;
     private String name;
     private String symbol;
+    private String country_symbol;
+
     private int rank;
     private double market_cap_usd;
     private double available_supply;
@@ -29,36 +31,31 @@ public class CoinMarketCapTicker {
     private double price_rub;
     private double price_uah;
 
-    private String country_symbol;
-
-
-    private Double getPrice(String id) {
-        switch (id) {
-            case "USD":
-                return getPrice_usd();
-            case "EUR":
-                return getPrice_eur();
-            case "CAD":
-                return getPrice_cad();
-            case "CNY":
-                return getPrice_cny();
-            case "JPY":
-                return getPrice_jpy();
-            case "PLN":
-                return getPrice_pln();
-            case "GBP":
-                return getPrice_gbp();
-            case "RUB":
-                return getPrice_rub();
-            case "UAH":
-                return getPrice_uah();
-            default:
-                return 0d;
-        }
-    }
 
     public Double getPrice() {
         return getPrice(country_symbol);
+    }
+
+    @Override
+    public String toString() {
+
+        double price = getPrice();
+
+        return "CoinMarketCapTicker{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", country_symbol='" + country_symbol + '\'' +
+                ", rank=" + rank +
+                ", market_cap_usd=" + market_cap_usd +
+                ", available_supply=" + available_supply +
+                ", total_supply=" + total_supply +
+                ", percent_change_1h=" + percent_change_1h +
+                ", percent_change_24h=" + percent_change_24h +
+                ", percent_change_7d=" + percent_change_7d +
+                ", last_updated=" + last_updated +
+                ", price_btc=" + price_btc +
+                ", price=" + price + '}';
     }
 
 
@@ -215,5 +212,31 @@ public class CoinMarketCapTicker {
     }
     public void setCountry_symbol(String country_symbol) {
         this.country_symbol = country_symbol;
+    }
+
+
+    private Double getPrice(String id) {
+        switch (id) {
+            case "USD":
+                return getPrice_usd();
+            case "EUR":
+                return getPrice_eur();
+            case "CAD":
+                return getPrice_cad();
+            case "CNY":
+                return getPrice_cny();
+            case "JPY":
+                return getPrice_jpy();
+            case "PLN":
+                return getPrice_pln();
+            case "GBP":
+                return getPrice_gbp();
+            case "RUB":
+                return getPrice_rub();
+            case "UAH":
+                return getPrice_uah();
+            default:
+                return 0d;
+        }
     }
 }

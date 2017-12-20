@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.List;
 
 
 @Entity
@@ -16,7 +15,7 @@ public class Ticker {
     private long tokenId;
     private String cryptoId;
     private String countryId;
-    private double price;
+    private CurrencyUpdate ticker;
 
 
     @Override
@@ -26,7 +25,7 @@ public class Ticker {
                 ", tokenId=" + tokenId +
                 ", cryptoId='" + cryptoId + '\'' +
                 ", countryId='" + countryId + '\'' +
-                ", price=" + price +
+                ", ticker=" + ticker +
                 '}';
     }
 
@@ -59,10 +58,10 @@ public class Ticker {
         this.countryId = countryId;
     }
 
-    public double getPrice() {
-        return price;
+    public CurrencyUpdate getTicker() {
+        return ticker;
     }
-    public void setPrice(double price) {
-        this.price = price;
+    public void setTicker(CurrencyUpdate ticker) {
+        this.ticker = ticker;
     }
 }

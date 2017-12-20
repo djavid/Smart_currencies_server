@@ -46,7 +46,7 @@ public class TickerController {
                     .findCurrencyUpdateByCryptoIdAndCountryId(ticker.getCryptoId(), ticker.getCountryId());
 
             if (currencyUpdate != null)
-                ticker.setPrice(currencyUpdate.getPrice());
+                ticker.setTicker(currencyUpdate);
         }
 
         return tickers;

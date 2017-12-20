@@ -66,10 +66,12 @@ public class ScheduledTasks {
                     .findCurrencyUpdateByCryptoIdAndCountryId(ticker.getSymbol(), ticker.getCountry_symbol());
 
             if (currencyUpdate == null) {
-                currencyUpdateRepository.save(
-                        new CurrencyUpdate(ticker.getSymbol(), ticker.getCountry_symbol(), ticker.getPrice()));
+                CurrencyUpdate newCurrUpdate = new CurrencyUpdate();
+
+                newCurrUpdate.setData(ticker);
+                currencyUpdateRepository.save(newCurrUpdate);
             } else {
-                currencyUpdate.setPrice(ticker.getPrice());
+                currencyUpdate.setData(ticker);
                 currencyUpdateRepository.save(currencyUpdate);
             }
         }
