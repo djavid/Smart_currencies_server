@@ -6,4 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface TickerRepository extends CrudRepository<Ticker, Long> {
     Iterable<Ticker> getTickersByTokenId(long token_id);
+    Ticker getTickerByTokenIdAndId(long token_id, long ticker_id);
 }

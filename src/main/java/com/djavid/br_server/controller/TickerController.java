@@ -52,6 +52,20 @@ public class TickerController {
         return tickers;
     }
 
+    @RequestMapping(value = "/getTicker", method = RequestMethod.GET)
+    public Ticker getTickerByTokenIdAndId(@RequestParam("token_id") long token_id,
+                                                    @RequestParam("ticker_id") long ticker_id) {
+
+        Ticker ticker = tickerRepository.getTickerByTokenIdAndId(token_id, ticker_id);
+
+        CurrencyUpdate currencyUpdate = currencyUpdateRepository
+                .findCurrencyUpdateByCryptoIdAndCountryId(ticker.getCryptoId(), ticker.getCountryId());
+        if (currencyUpdate != null)
+            ticker.setTicker(currencyUpdate);
+
+        return ticker;
+    }
+
 
     @RequestMapping(value = "/addTicker", method = RequestMethod.POST)
     public ResponseId subscribe(@RequestBody Ticker ticker) {
