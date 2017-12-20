@@ -1,9 +1,6 @@
 package com.djavid.br_server.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @Entity
@@ -15,6 +12,8 @@ public class Ticker {
     private long tokenId;
     private String cryptoId;
     private String countryId;
+    @ManyToOne
+    @JoinColumn(name = "cu_id")
     private CurrencyUpdate ticker;
 
 
