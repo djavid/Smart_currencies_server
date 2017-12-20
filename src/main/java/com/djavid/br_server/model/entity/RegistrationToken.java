@@ -17,6 +17,7 @@ public class RegistrationToken {
     public String token;
 
     public RegistrationToken(String token) {
+        this.id = 0;
         this.token = token;
     }
 

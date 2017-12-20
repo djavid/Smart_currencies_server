@@ -67,7 +67,7 @@ public class TokenController {
             return new ResponseId("Something gone wrong");
 
         } catch (Exception e) {
-            return new ResponseId("Something gone wrong");
+            return new ResponseId(e.getMessage());
         }
     }
 
