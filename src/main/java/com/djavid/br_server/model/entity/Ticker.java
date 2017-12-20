@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Ticker {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long tokenId;
     private String cryptoId;
