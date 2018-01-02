@@ -1,9 +1,11 @@
 package com.djavid.br_server.controller;
 
 import com.djavid.br_server.BrServerApplication;
+import com.djavid.br_server.Config;
 import com.djavid.br_server.model.entity.CurrencyUpdate;
 import com.djavid.br_server.model.entity.ResponseId;
 import com.djavid.br_server.model.entity.Ticker;
+import com.djavid.br_server.model.entity.exmo.ExmoTicker;
 import com.djavid.br_server.model.repository.CurrencyUpdateRepository;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.model.repository.SubscribeRepository;
@@ -11,6 +13,7 @@ import com.djavid.br_server.model.repository.TickerRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 
 @RestController
@@ -20,6 +23,7 @@ public class TickerController {
     private final SubscribeRepository subscribeRepository;
     private final RegistrationTokenRepository tokenRepository;
     private final CurrencyUpdateRepository currencyUpdateRepository;
+    private RestTemplate restTemplate;
 
 
     public TickerController(TickerRepository tickerRepository, SubscribeRepository subscribeRepository,
@@ -28,6 +32,7 @@ public class TickerController {
         this.subscribeRepository = subscribeRepository;
         this.tokenRepository = tokenRepository;
         this.currencyUpdateRepository = currencyUpdateRepository;
+        this.restTemplate = new RestTemplate();
     }
 
 
@@ -93,6 +98,13 @@ public class TickerController {
         } catch (Exception e) {
             return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value = "/exmo", method = RequestMethod.GET)
+    public String getExmoTicker(@RequestParam("pair") String pair) {
+
+        ExmoTicker exmoTicker = restTemplate.getForObject(Config.EXMO_TICKER_URL, ExmoTicker.class);
+        return exmoTicker.XRPUSD.toString();
     }
 
 }

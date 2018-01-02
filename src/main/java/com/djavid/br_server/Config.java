@@ -12,6 +12,7 @@ public class Config {
 
     //API
     public final static String COINMARKETCAP_URL = "https://api.coinmarketcap.com/v1/ticker/?convert=";
+    public final static String EXMO_TICKER_URL = "https://api.exmo.com/v1/ticker/";
 
     //CODES
     public static String[] country_codes = new String[]{
