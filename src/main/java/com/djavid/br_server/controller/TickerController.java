@@ -104,6 +104,7 @@ public class TickerController {
     public String getExmoTicker(@RequestParam("pair") String pair) {
 
         ExmoTicker exmoTicker = restTemplate.getForObject(Config.EXMO_TICKER_URL, ExmoTicker.class);
+        BrServerApplication.log.info(exmoTicker.XRPUSD.toString());
         return exmoTicker.XRPUSD.toString();
     }
 

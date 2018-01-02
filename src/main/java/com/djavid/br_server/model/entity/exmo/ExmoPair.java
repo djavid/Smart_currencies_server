@@ -3,52 +3,52 @@ package com.djavid.br_server.model.entity.exmo;
 
 public class ExmoPair {
 
-    private String buyPrice;
-    private String sellPrice;
-    private String lastTrade;
+    private String buy_price;
+    private String sell_price;
+    private String last_trade;
     private String high;
     private String low;
     private String avg;
     private String vol;
-    private String volCurr;
+    private String vol_curr;
     private Integer updated;
 
 
     @Override
     public String toString() {
         return "ExmoPair{" +
-                "buyPrice='" + buyPrice + '\'' +
-                ", sellPrice='" + sellPrice + '\'' +
-                ", lastTrade='" + lastTrade + '\'' +
+                "buy_price='" + buy_price + '\'' +
+                ", sell_price='" + sell_price + '\'' +
+                ", last_trade='" + last_trade + '\'' +
                 ", high='" + high + '\'' +
                 ", low='" + low + '\'' +
                 ", avg='" + avg + '\'' +
                 ", vol='" + vol + '\'' +
-                ", volCurr='" + volCurr + '\'' +
+                ", vol_curr='" + vol_curr + '\'' +
                 ", updated=" + updated +
                 '}';
     }
 
 
-    public String getBuyPrice() {
-        return buyPrice;
+    public String getBuy_price() {
+        return buy_price;
     }
-    public void setBuyPrice(String buyPrice) {
-        this.buyPrice = buyPrice;
-    }
-
-    public String getSellPrice() {
-        return sellPrice;
-    }
-    public void setSellPrice(String sellPrice) {
-        this.sellPrice = sellPrice;
+    public void setBuy_price(String buy_price) {
+        this.buy_price = buy_price;
     }
 
-    public String getLastTrade() {
-        return lastTrade;
+    public String getSell_price() {
+        return sell_price;
     }
-    public void setLastTrade(String lastTrade) {
-        this.lastTrade = lastTrade;
+    public void setSell_price(String sell_price) {
+        this.sell_price = sell_price;
+    }
+
+    public String getLast_trade() {
+        return last_trade;
+    }
+    public void setLast_trade(String last_trade) {
+        this.last_trade = last_trade;
     }
 
     public String getHigh() {
@@ -79,11 +79,11 @@ public class ExmoPair {
         this.vol = vol;
     }
 
-    public String getVolCurr() {
-        return volCurr;
+    public String getVol_curr() {
+        return vol_curr;
     }
-    public void setVolCurr(String volCurr) {
-        this.volCurr = volCurr;
+    public void setVol_curr(String vol_curr) {
+        this.vol_curr = vol_curr;
     }
 
     public Integer getUpdated() {
