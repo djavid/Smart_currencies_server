@@ -21,6 +21,8 @@ public class Subscribe {
     private String cryptoId;
     private String countryId;
     private double change_percent;
+    private long created;
+    private long lastVisited;
 
 
     @Override
@@ -93,5 +95,19 @@ public class Subscribe {
     }
     public void setChange_percent(double change_percent) {
         this.change_percent = change_percent;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+    public void setCreated(long created) {
+        this.created = created;
+    }
+
+    public long getLastVisited() {
+        return lastVisited;
+    }
+    public void setLastVisited(long lastVisited) {
+        this.lastVisited = lastVisited;
     }
 }

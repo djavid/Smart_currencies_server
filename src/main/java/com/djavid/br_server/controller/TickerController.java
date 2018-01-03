@@ -85,12 +85,15 @@ public class TickerController {
 
 
     @RequestMapping(value = "/addTicker", method = RequestMethod.POST)
-    public ResponseId subscribe(@RequestBody Ticker ticker) {
+    public ResponseId addTicker(@RequestBody Ticker ticker) {
 
         if (ticker == null)
             return new ResponseId("Sent null entity!");
 
         try {
+            ticker.setCreated(System.currentTimeMillis());
+            ticker.setLastVisited(ticker.getCreated());
+
             Long id = tickerRepository.save(ticker).getId();
             BrServerApplication.log.info("Saved  " + ticker.toString());
 

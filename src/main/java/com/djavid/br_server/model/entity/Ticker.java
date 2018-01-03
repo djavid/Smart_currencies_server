@@ -16,6 +16,9 @@ public class Ticker {
     @JoinColumn(name = "cu_id")
     private CurrencyUpdate ticker;
 
+    private long created;
+    private long lastVisited;
+
 
     @Override
     public String toString() {
@@ -62,5 +65,19 @@ public class Ticker {
     }
     public void setTicker(CurrencyUpdate ticker) {
         this.ticker = ticker;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+    public void setCreated(long created) {
+        this.created = created;
+    }
+
+    public long getLastVisited() {
+        return lastVisited;
+    }
+    public void setLastVisited(long lastVisited) {
+        this.lastVisited = lastVisited;
     }
 }
