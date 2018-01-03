@@ -1,8 +1,10 @@
 package com.djavid.br_server.controller;
 
 import com.djavid.br_server.BrServerApplication;
+import com.djavid.br_server.model.entity.RegistrationToken;
 import com.djavid.br_server.model.entity.ResponseId;
 import com.djavid.br_server.model.entity.Subscribe;
+import com.djavid.br_server.model.repository.RegistrationTokenRepository;
 import com.djavid.br_server.model.repository.SubscribeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class SubscribeController {
 
     private final SubscribeRepository subscribeRepository;
+    private final RegistrationTokenRepository tokenRepository;
 
 
-    public SubscribeController(SubscribeRepository subscribeRepository) {
+    public SubscribeController(SubscribeRepository subscribeRepository, RegistrationTokenRepository tokenRepository) {
         this.subscribeRepository = subscribeRepository;
+        this.tokenRepository = tokenRepository;
     }
 
 
@@ -28,7 +32,13 @@ public class SubscribeController {
 
 
     @RequestMapping(value = "/getSubscribes", method = RequestMethod.GET)
-    public Iterable<Subscribe> getSubscribesByTokenId(@RequestParam("token_id") Long token_id) {
+    public Iterable<Subscribe> getSubscribesByTokenId(@RequestHeader("Token") String token,
+                                                      @RequestParam("token_id") Long token_id) {
+
+        RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
+        if (registrationToken == null || !registrationToken.token.equals(token))
+            return null;
+
         return subscribeRepository.findSubscribesByTokenId(token_id);
     }
 
@@ -51,8 +61,14 @@ public class SubscribeController {
 
 
     @RequestMapping(value = "/deleteSubscribe", method = RequestMethod.GET)
-    public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
+    public ResponseEntity<String> deleteSubscribe(@RequestHeader("Token") String token,
+                                                  @RequestParam("id") long id) {
         try {
+            Long token_id = subscribeRepository.findOne(id).getTokenId();
+            RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
+            if (registrationToken == null || !registrationToken.token.equals(token))
+                return new ResponseEntity<>("Invalid token!", HttpStatus.BAD_REQUEST);
+
             subscribeRepository.delete(id);
             BrServerApplication.log.info("Deleted subscribe with id=" + id);
             return new ResponseEntity<>(HttpStatus.OK);

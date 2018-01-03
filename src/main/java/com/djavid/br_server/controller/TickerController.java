@@ -3,6 +3,7 @@ package com.djavid.br_server.controller;
 import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.Config;
 import com.djavid.br_server.model.entity.CurrencyUpdate;
+import com.djavid.br_server.model.entity.RegistrationToken;
 import com.djavid.br_server.model.entity.ResponseId;
 import com.djavid.br_server.model.entity.Ticker;
 import com.djavid.br_server.model.entity.exmo.ExmoTicker;
@@ -44,7 +45,13 @@ public class TickerController {
 
 
     @RequestMapping(value = "/getTickers", method = RequestMethod.GET)
-    public Iterable<Ticker> getTickersByTokenId(@RequestParam("token_id") long token_id) {
+    public Iterable<Ticker> getTickersByTokenId(@RequestHeader("Token") String token,
+                                                @RequestParam("token_id") long token_id) {
+
+        RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
+        if (registrationToken == null || !registrationToken.token.equals(token))
+            return null;
+
         Iterable<Ticker> tickers = tickerRepository.getTickersByTokenId(token_id);
         for (Ticker ticker : tickers) {
             CurrencyUpdate currencyUpdate = currencyUpdateRepository
@@ -58,8 +65,13 @@ public class TickerController {
     }
 
     @RequestMapping(value = "/getTicker", method = RequestMethod.GET)
-    public Ticker getTickerByTokenIdAndId(@RequestParam("token_id") long token_id,
-                                                    @RequestParam("ticker_id") long ticker_id) {
+    public Ticker getTickerByTokenIdAndId(@RequestHeader("Token") String token,
+                                          @RequestParam("token_id") long token_id,
+                                          @RequestParam("ticker_id") long ticker_id) {
+
+        RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
+        if (registrationToken == null || !registrationToken.token.equals(token))
+            return null;
 
         Ticker ticker = tickerRepository.getTickerByTokenIdAndId(token_id, ticker_id);
 
@@ -74,6 +86,7 @@ public class TickerController {
 
     @RequestMapping(value = "/addTicker", method = RequestMethod.POST)
     public ResponseId subscribe(@RequestBody Ticker ticker) {
+
         if (ticker == null)
             return new ResponseId("Sent null entity!");
 
@@ -89,12 +102,19 @@ public class TickerController {
 
 
     @RequestMapping(value = "/deleteTicker", method = RequestMethod.GET)
-    public ResponseEntity<String> deleteSubscribe(@RequestParam("id") long id) {
+    public ResponseEntity<String> deleteSubscribe(@RequestHeader("Token") String token,
+                                                  @RequestParam("id") long id) {
         try {
+            Long token_id = tickerRepository.findOne(id).getTokenId();
+            RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
+            if (registrationToken == null || !registrationToken.token.equals(token))
+                return new ResponseEntity<>("Invalid token!", HttpStatus.BAD_REQUEST);
+
             tickerRepository.delete(id);
             subscribeRepository.delete(subscribeRepository.findSubscribesByTickerId(id));
             BrServerApplication.log.info("Deleted ticker with id=" + id);
             return new ResponseEntity<>(HttpStatus.OK);
+
         } catch (Exception e) {
             return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
         }
