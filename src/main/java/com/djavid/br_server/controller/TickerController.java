@@ -52,6 +52,7 @@ public class TickerController {
         if (registrationToken == null || !registrationToken.getToken().equals(token))
             return new ResponseTickers("Access denied!");
         registrationToken.setLastVisited(System.currentTimeMillis());
+        tokenRepository.save(registrationToken);
 
         Iterable<Ticker> tickers = tickerRepository.getTickersByTokenId(token_id);
         for (Ticker ticker : tickers) {
@@ -74,6 +75,7 @@ public class TickerController {
         if (registrationToken == null || !registrationToken.getToken().equals(token))
             return null;
         registrationToken.setLastVisited(System.currentTimeMillis());
+        tokenRepository.save(registrationToken);
 
         Ticker ticker = tickerRepository.getTickerByTokenIdAndId(token_id, ticker_id);
 
@@ -93,7 +95,6 @@ public class TickerController {
 
         try {
             ticker.setCreated(System.currentTimeMillis());
-
             Long id = tickerRepository.save(ticker).getId();
             BrServerApplication.log.info("Saved  " + ticker.toString());
 
@@ -113,6 +114,7 @@ public class TickerController {
             if (registrationToken == null || !registrationToken.getToken().equals(token))
                 return new ResponseEntity<>("Invalid token!", HttpStatus.BAD_REQUEST);
             registrationToken.setLastVisited(System.currentTimeMillis());
+            tokenRepository.save(registrationToken);
 
             tickerRepository.delete(id);
             subscribeRepository.delete(subscribeRepository.findSubscribesByTickerId(id));

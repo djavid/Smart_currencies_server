@@ -39,6 +39,7 @@ public class SubscribeController {
         if (registrationToken == null || !registrationToken.getToken().equals(token))
             return null;
         registrationToken.setLastVisited(System.currentTimeMillis());
+        tokenRepository.save(registrationToken);
 
         return subscribeRepository.findSubscribesByTokenId(token_id);
     }
@@ -71,6 +72,7 @@ public class SubscribeController {
             if (registrationToken == null || !registrationToken.getToken().equals(token))
                 return new ResponseEntity<>("Invalid token!", HttpStatus.BAD_REQUEST);
             registrationToken.setLastVisited(System.currentTimeMillis());
+            tokenRepository.save(registrationToken);
 
             subscribeRepository.delete(id);
             BrServerApplication.log.info("Deleted subscribe with id=" + id);
