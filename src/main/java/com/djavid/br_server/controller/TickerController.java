@@ -45,14 +45,12 @@ public class TickerController {
 
 
     @RequestMapping(value = "/getTickers", method = RequestMethod.GET)
-    public ResponseEntity getTickersByTokenId(@RequestHeader("Token") String token,
+    public Iterable<Ticker> getTickersByTokenId(@RequestHeader("Token") String token,
                                                 @RequestParam("token_id") long token_id) {
 
         RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
         if (registrationToken == null || !registrationToken.token.equals(token))
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Invalid token!");
+            return null;
 
         Iterable<Ticker> tickers = tickerRepository.getTickersByTokenId(token_id);
         for (Ticker ticker : tickers) {
@@ -63,9 +61,7 @@ public class TickerController {
                 ticker.setTicker(currencyUpdate);
         }
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(tickers);
+        return tickers;
     }
 
     @RequestMapping(value = "/getTicker", method = RequestMethod.GET)
