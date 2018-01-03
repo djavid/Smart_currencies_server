@@ -34,7 +34,7 @@ public class PushController {
         RegistrationToken token = registrationTokenRepository.findAll().iterator().next();
 
         try {
-            CompletableFuture<String> pushNotification = androidPushNotificationsService.send(token.token, title, desc);
+            CompletableFuture<String> pushNotification = androidPushNotificationsService.send(token.getToken(), title, desc);
             CompletableFuture.allOf(pushNotification).join();
             String firebaseResponse = pushNotification.get();
 
