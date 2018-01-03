@@ -186,7 +186,7 @@ public class ScheduledTasks {
         BrServerApplication.log.info("Sending push notification with title ='" + title + "' and body = '" + desc + "';");
 
         try {
-            CompletableFuture<String> pushNotification = androidPushNotificationsService.send(token.token, title, desc);
+            CompletableFuture<String> pushNotification = androidPushNotificationsService.send(token.getToken(), title, desc);
             CompletableFuture.allOf(pushNotification).join();
             String firebaseResponse = pushNotification.get();
 
