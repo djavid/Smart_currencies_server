@@ -2,10 +2,7 @@ package com.djavid.br_server.controller;
 
 import com.djavid.br_server.BrServerApplication;
 import com.djavid.br_server.Config;
-import com.djavid.br_server.model.entity.CurrencyUpdate;
-import com.djavid.br_server.model.entity.RegistrationToken;
-import com.djavid.br_server.model.entity.ResponseId;
-import com.djavid.br_server.model.entity.Ticker;
+import com.djavid.br_server.model.entity.*;
 import com.djavid.br_server.model.entity.exmo.ExmoTicker;
 import com.djavid.br_server.model.repository.CurrencyUpdateRepository;
 import com.djavid.br_server.model.repository.RegistrationTokenRepository;
@@ -45,12 +42,15 @@ public class TickerController {
 
 
     @RequestMapping(value = "/getTickers", method = RequestMethod.GET)
-    public Iterable<Ticker> getTickersByTokenId(@RequestHeader("Token") String token,
-                                                @RequestParam("token_id") long token_id) {
+    public ResponseTickers getTickersByTokenId(@RequestHeader("Token") String token,
+                                               @RequestParam("token_id") long token_id) {
+
+        if (tokenRepository.findRegistrationTokenByToken(token) == null)
+            return new ResponseTickers("No such token!");
 
         RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
         if (registrationToken == null || !registrationToken.token.equals(token))
-            return null;
+            return new ResponseTickers("Access denied!");
 
         Iterable<Ticker> tickers = tickerRepository.getTickersByTokenId(token_id);
         for (Ticker ticker : tickers) {
@@ -61,7 +61,7 @@ public class TickerController {
                 ticker.setTicker(currencyUpdate);
         }
 
-        return tickers;
+        return new ResponseTickers(tickers);
     }
 
     @RequestMapping(value = "/getTicker", method = RequestMethod.GET)
