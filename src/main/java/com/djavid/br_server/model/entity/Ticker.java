@@ -12,12 +12,10 @@ public class Ticker {
     private long tokenId;
     private String cryptoId;
     private String countryId;
+    private long created;
     @ManyToOne
     @JoinColumn(name = "cu_id")
     private CurrencyUpdate ticker;
-
-    private long created;
-    private long lastVisited;
 
 
     @Override
@@ -74,10 +72,4 @@ public class Ticker {
         this.created = created;
     }
 
-    public long getLastVisited() {
-        return lastVisited;
-    }
-    public void setLastVisited(long lastVisited) {
-        this.lastVisited = lastVisited;
-    }
 }

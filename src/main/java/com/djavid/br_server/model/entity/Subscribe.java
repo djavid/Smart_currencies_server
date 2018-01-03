@@ -22,7 +22,6 @@ public class Subscribe {
     private String countryId;
     private double change_percent;
     private long created;
-    private long lastVisited;
 
 
     @Override
@@ -102,12 +101,5 @@ public class Subscribe {
     }
     public void setCreated(long created) {
         this.created = created;
-    }
-
-    public long getLastVisited() {
-        return lastVisited;
-    }
-    public void setLastVisited(long lastVisited) {
-        this.lastVisited = lastVisited;
     }
 }

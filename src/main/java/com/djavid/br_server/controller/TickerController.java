@@ -49,8 +49,9 @@ public class TickerController {
             return new ResponseTickers("No such token!");
 
         RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
-        if (registrationToken == null || !registrationToken.token.equals(token))
+        if (registrationToken == null || !registrationToken.getToken().equals(token))
             return new ResponseTickers("Access denied!");
+        registrationToken.setLastVisited(System.currentTimeMillis());
 
         Iterable<Ticker> tickers = tickerRepository.getTickersByTokenId(token_id);
         for (Ticker ticker : tickers) {
@@ -70,15 +71,15 @@ public class TickerController {
                                           @RequestParam("ticker_id") long ticker_id) {
 
         RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
-        if (registrationToken == null || !registrationToken.token.equals(token))
+        if (registrationToken == null || !registrationToken.getToken().equals(token))
             return null;
+        registrationToken.setLastVisited(System.currentTimeMillis());
 
         Ticker ticker = tickerRepository.getTickerByTokenIdAndId(token_id, ticker_id);
 
         CurrencyUpdate currencyUpdate = currencyUpdateRepository
                 .findCurrencyUpdateByCryptoIdAndCountryId(ticker.getCryptoId(), ticker.getCountryId());
-        if (currencyUpdate != null)
-            ticker.setTicker(currencyUpdate);
+        if (currencyUpdate != null) ticker.setTicker(currencyUpdate);
 
         return ticker;
     }
@@ -92,7 +93,6 @@ public class TickerController {
 
         try {
             ticker.setCreated(System.currentTimeMillis());
-            ticker.setLastVisited(ticker.getCreated());
 
             Long id = tickerRepository.save(ticker).getId();
             BrServerApplication.log.info("Saved  " + ticker.toString());
@@ -110,8 +110,9 @@ public class TickerController {
         try {
             Long token_id = tickerRepository.findOne(id).getTokenId();
             RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
-            if (registrationToken == null || !registrationToken.token.equals(token))
+            if (registrationToken == null || !registrationToken.getToken().equals(token))
                 return new ResponseEntity<>("Invalid token!", HttpStatus.BAD_REQUEST);
+            registrationToken.setLastVisited(System.currentTimeMillis());
 
             tickerRepository.delete(id);
             subscribeRepository.delete(subscribeRepository.findSubscribesByTickerId(id));

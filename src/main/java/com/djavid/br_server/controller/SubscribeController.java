@@ -36,8 +36,9 @@ public class SubscribeController {
                                                       @RequestParam("token_id") Long token_id) {
 
         RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
-        if (registrationToken == null || !registrationToken.token.equals(token))
+        if (registrationToken == null || !registrationToken.getToken().equals(token))
             return null;
+        registrationToken.setLastVisited(System.currentTimeMillis());
 
         return subscribeRepository.findSubscribesByTokenId(token_id);
     }
@@ -64,14 +65,17 @@ public class SubscribeController {
     public ResponseEntity<String> deleteSubscribe(@RequestHeader("Token") String token,
                                                   @RequestParam("id") long id) {
         try {
+
             Long token_id = subscribeRepository.findOne(id).getTokenId();
             RegistrationToken registrationToken = tokenRepository.findRegistrationTokenById(token_id);
-            if (registrationToken == null || !registrationToken.token.equals(token))
+            if (registrationToken == null || !registrationToken.getToken().equals(token))
                 return new ResponseEntity<>("Invalid token!", HttpStatus.BAD_REQUEST);
+            registrationToken.setLastVisited(System.currentTimeMillis());
 
             subscribeRepository.delete(id);
             BrServerApplication.log.info("Deleted subscribe with id=" + id);
             return new ResponseEntity<>(HttpStatus.OK);
+
         } catch (Exception e) {
             return new ResponseEntity<>("Something gone wrong", HttpStatus.BAD_REQUEST);
         }

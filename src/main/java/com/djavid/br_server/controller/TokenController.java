@@ -39,28 +39,25 @@ public class TokenController {
             return new ResponseId("Wrong device id!");
 
         RegistrationToken registrationToken = registrationTokenRepository.findRegistrationTokenByToken(device_id);
-        if (registrationToken != null && registrationToken.token.equals(device_id))
+        if (registrationToken != null && registrationToken.getToken().equals(device_id))
             return new ResponseId("Device id was already registered!",
-                    registrationToken.id);
+                    registrationToken.getId());
 
         try {
-            if (db_id == 0) {
 
-                Long id = registrationTokenRepository.save(new RegistrationToken(device_id)).id;
+            if (db_id == 0 || registrationTokenRepository.findRegistrationTokenById(db_id) == null) {
+                RegistrationToken token = new RegistrationToken(device_id);
+                token.setCreated(System.currentTimeMillis());
+
+                Long id = registrationTokenRepository.save(token).getId();
                 BrServerApplication.log.info("Saved token(" + device_id + ") with id(" + id + ")");
                 return new ResponseId(id);
 
             } else if (registrationTokenRepository.findRegistrationTokenById(db_id) != null) {
 
-                registrationTokenRepository.findRegistrationTokenById(db_id).token = device_id;
+                registrationTokenRepository.findRegistrationTokenById(db_id).setToken(device_id);
                 BrServerApplication.log.info("Updated token(" + device_id + ") with id(" + db_id + ")");
                 return new ResponseId(db_id);
-
-            } else if (registrationTokenRepository.findRegistrationTokenById(db_id) == null) {
-
-                Long id = registrationTokenRepository.save(new RegistrationToken(device_id)).id;
-                BrServerApplication.log.info("Saved token(" + device_id + ") with id(" + id + ")");
-                return new ResponseId(id);
 
             }
 
