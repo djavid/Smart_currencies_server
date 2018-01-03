@@ -51,6 +51,7 @@ public class SubscribeController {
             return new ResponseId("Sent null entity!");
 
         try {
+            subscribe.setCreated(System.currentTimeMillis());
             Long id = subscribeRepository.save(subscribe).getId();
             BrServerApplication.log.info("Saved " + subscribe.toString());
 
