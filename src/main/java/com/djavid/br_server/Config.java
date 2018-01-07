@@ -45,7 +45,8 @@ public class Config {
             new Coin("USDT", "tether"), new Coin("NXT", "nxt"), new Coin("XVG", "verge"),
             new Coin("STEEM", "steem"), new Coin("XLM", "stellar"), new Coin("BCN", "bytecoin-bcn"),
             new Coin("STRAT", "stratis"), new Coin("TRX", "tron"), new Coin("ADA", "cardano"),
-            new Coin("MIOTA", "iota"), new Coin("BTS", "bitshares"), new Coin("ARDR", "ardor")
+            new Coin("MIOTA", "iota"), new Coin("BTS", "bitshares"), new Coin("ARDR", "ardor"),
+            new Coin("MTH", "monetha")
     };
 
     public static String[] crypto_coins_array = Stream
