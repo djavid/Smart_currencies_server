@@ -83,36 +83,31 @@ public class ScheduledTasks {
 
         for (String country : country_coins) {
 
-            try {
-                CoinMarketCapTicker[] coinMarketList = restTemplate
-                        .getForObject(Config.COINMARKETCAP_URL + country, CoinMarketCapTicker[].class);
-                CoinMarketCapTicker[] coinMarketList2 = restTemplate
-                        .getForObject(Config.COINMARKETCAP_URL + country + "&start=100", CoinMarketCapTicker[].class);
-                CoinMarketCapTicker[] coinMarketList3 = restTemplate
-                        .getForObject(Config.COINMARKETCAP_URL + country + "&start=200", CoinMarketCapTicker[].class);
-                CoinMarketCapTicker[] coinMarketList4 = restTemplate
-                        .getForObject(Config.COINMARKETCAP_URL + country + "&start=300", CoinMarketCapTicker[].class);
+            System.out.println(country);
 
-                List<CoinMarketCapTicker> list = new ArrayList<>(Arrays.asList(coinMarketList));
-                list.addAll(Arrays.asList(coinMarketList2));
-                list.addAll(Arrays.asList(coinMarketList3));
-                list.addAll(Arrays.asList(coinMarketList4));
+            CoinMarketCapTicker[] coinMarketList = restTemplate
+                    .getForObject(Config.COINMARKETCAP_URL + country, CoinMarketCapTicker[].class);
+            CoinMarketCapTicker[] coinMarketList2 = restTemplate
+                    .getForObject(Config.COINMARKETCAP_URL + country + "&start=100", CoinMarketCapTicker[].class);
+            CoinMarketCapTicker[] coinMarketList3 = restTemplate
+                    .getForObject(Config.COINMARKETCAP_URL + country + "&start=200", CoinMarketCapTicker[].class);
+            CoinMarketCapTicker[] coinMarketList4 = restTemplate
+                    .getForObject(Config.COINMARKETCAP_URL + country + "&start=300", CoinMarketCapTicker[].class);
 
-                for (String coin_symbol : crypto_coins_array) {
-                    list.stream()
-                            .filter(ticker -> ticker.getSymbol().equals(coin_symbol))
-                            .findFirst()
-                            .ifPresent(ticker -> {
-                                ticker.setCountry_symbol(country);
-                                pairs.add(ticker);
-                            });
-                }
+            List<CoinMarketCapTicker> list = new ArrayList<>(Arrays.asList(coinMarketList));
+            list.addAll(Arrays.asList(coinMarketList2));
+            list.addAll(Arrays.asList(coinMarketList3));
+            list.addAll(Arrays.asList(coinMarketList4));
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println(country);
+            for (String coin_symbol : crypto_coins_array) {
+                list.stream()
+                        .filter(ticker -> ticker.getSymbol().equals(coin_symbol))
+                        .findFirst()
+                        .ifPresent(ticker -> {
+                            ticker.setCountry_symbol(country);
+                            pairs.add(ticker);
+                        });
             }
-
         }
 
         return pairs;
