@@ -51,11 +51,12 @@ public class ScheduledTasks {
     @Scheduled(fixedDelay = Config.FIXED_DELAY)
     public void getCurrentRate() {
 
-        List<CoinMarketCapTicker> pairs = getCurrentPairs();
-
-        saveUpdatesToRepository(pairs);
-        logUpdate(pairs);
-        notifyAllSubscribes(pairs);
+        for (String country : country_coins) {
+            List<CoinMarketCapTicker> pairs = getCurrentPairs(country);
+            saveUpdatesToRepository(pairs);
+            logUpdate(pairs, country);
+            notifyAllSubscribes(pairs);
+        }
 
     }
 
@@ -77,11 +78,11 @@ public class ScheduledTasks {
         }
     }
 
-    private List<CoinMarketCapTicker> getCurrentPairs() {
+    private List<CoinMarketCapTicker> getCurrentPairs(String country) {
 
         List<CoinMarketCapTicker> pairs = new ArrayList<>();
 
-        for (String country : country_coins) {
+//        for (String country : country_coins) {
 
             System.out.println(country);
 
@@ -111,7 +112,7 @@ public class ScheduledTasks {
                             pairs.add(ticker);
                         });
             }
-        }
+//        }
 
         return pairs;
     }
@@ -144,14 +145,14 @@ public class ScheduledTasks {
 
     }
 
-    private void logUpdate(List<CoinMarketCapTicker> pairs) {
+    private void logUpdate(List<CoinMarketCapTicker> pairs, String country) {
 //        String summary = "";
 //        for (CoinMarketCapTicker ticker : pairs)
 //            summary += "{" + ticker.getCountry_symbol() + "-" + ticker.getSymbol() + " = " + ticker.getPrice() + "} ";
 //        BrServerApplication.log.info(summary);
 
         TimeZone.setDefault(TimeZone.getTimeZone("UTC+03:00"));
-        BrServerApplication.log.info("Cryptorates updated at " + new Date(System.currentTimeMillis()));
+        BrServerApplication.log.info("Cryptorates updated for " + country + " at " + new Date(System.currentTimeMillis()));
 
     }
 
