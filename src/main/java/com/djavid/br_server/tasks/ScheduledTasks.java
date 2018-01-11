@@ -177,10 +177,8 @@ public class ScheduledTasks {
 
         Ticker ticker = tickerRepository.findOne(subscribe.getTickerId());
         RegistrationToken token = registrationTokenRepository.findOne(ticker.getTokenId());
-        String curr_full = capitalize(capTicker.getId());
-        //String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
 
-        String title = "Изменение цены " + curr_full;
+        String title = getPushTitle(subscribe, capTicker);
         String desc = getPushDescription(subscribe, capTicker, ticker);
 
         BrServerApplication.log.info("Sending push notification with title ='" + title + "' and body = '" + desc + "';");
@@ -197,11 +195,32 @@ public class ScheduledTasks {
         }
     }
 
+    private String getPushTitle(Subscribe subscribe, CoinMarketCapTicker capTicker) {
+
+        String curr_full = capitalize(capTicker.getId());
+
+        if (subscribe.getChange_percent() > 0) {
+
+            if (capTicker.getPrice() > Double.parseDouble(subscribe.getValue()))
+                return curr_full + " вырос";
+            else
+                return curr_full + " упал";
+
+        } else {
+
+            if (subscribe.isTrendingUp()) {
+                return curr_full + " вырос";
+            } else {
+                return curr_full + " упал";
+            }
+
+        }
+    }
+
     private String getPushDescription(Subscribe subscribe, CoinMarketCapTicker capTicker, Ticker ticker) {
 
         String curr_full = capitalize(capTicker.getId());
-        //String curr_full = Config.getCurrencyFullName(ticker.getCryptoId());
-        String desc = "";
+        String desc;
 
         if (subscribe.getChange_percent() > 0) {
 

@@ -42,10 +42,6 @@ public class AndroidPushNotificationsService {
         notification.put("body", desc);
         notification.put("sound", "default");
 
-        JSONObject data = new JSONObject();
-        data.put("Key-1", "JSA Data 1");
-        data.put("Key-2", "JSA Data 2");
-
         JSONObject body = new JSONObject();
         body.put("to", device_id);
         body.put("priority", "high");
